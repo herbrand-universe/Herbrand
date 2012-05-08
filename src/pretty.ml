@@ -15,6 +15,7 @@ let pp_sort fmt = function
 
 
 let rec pp_term fmt = function
+  | Id  n           -> fprintf fmt "%d" n
   | Var name        -> fprintf fmt "%s" name
   | Sort s          -> fprintf fmt "%a" pp_sort s
   | Lam  (s,t1, t2) -> 

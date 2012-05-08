@@ -2,6 +2,7 @@ open Ast
 open Format
 open Pretty
 
+
 let process_global = function
  | Ginfer t            -> Format.printf "%a@\n" pp_term t
  | Gquit               -> raise Lexer.Eof
