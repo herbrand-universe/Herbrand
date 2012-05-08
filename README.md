@@ -5,5 +5,6 @@ Herbrand Universe
 
 *To Do*
    * Add *infer*, *whnf*, *check* and *=* tokens.
-   * Function to traslate terms with variables in terms with DeBrujin index.
+   * Function to translate terms with variables in terms with DeBrujin index.
+   * Bla bla bla
 
