@@ -2,13 +2,15 @@ open Ast
 open Format
 open Pretty
 
-
+(* Aca empieza todo a fines practicos *)
 let main = function
  | Ginfer t            -> Format.printf "%a@\n" pp_term t
  | Gquit               -> raise Lexer.Eof
  | g -> Format.printf "Termino = [%a] @." pp_global g 
 
 
+
+(* Esta choto pero no importa ... ya lo pondre lindo :) *)
 let parse () = 
   let rec parse_and_catch () =
     try
