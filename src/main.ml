@@ -3,7 +3,7 @@ open Format
 open Pretty
 
 
-let process_global = function
+let main = function
  | Ginfer t            -> Format.printf "%a@\n" pp_term t
  | Gquit               -> raise Lexer.Eof
  | g -> Format.printf "Termino = [%a] @." pp_global g 
@@ -15,7 +15,7 @@ let parse () =
       let lexbuf = Lexing.from_channel stdin in
       printf "Herbrand>@?";
       let global = Parser.global Lexer.token lexbuf in
-        process_global global;
+        main global;
         parse_and_catch () 
     with
       | Lexer.Eof -> exit 0 
