@@ -4,7 +4,8 @@ exception Eof
 
 let keywords_symbols =
   [
-    "Pi",      PI;
+    "L",      LAM;
+    "P",      PI;
     "Prop",    PROP;
     "Type",    TYPE;
   ]
@@ -49,18 +50,13 @@ rule token = parse
   | number             { NUM (int_of_string (Lexing.lexeme lexbuf))}
   | ident as id               {
         try Hashtbl.find keywords id with Not_found -> IDENT id }
-  | '.'                { DOT }
-  | ':'                { COLON }
-  | '\\'               { LAM }
-  (*Logic's symbols*)
-  | '<'                { LT }
-  | '>'                { GT }
 
-  | '['                { LBRACKET }
-  | ']'                { RBRACKET }
+| ':'                { COLON }
+  | ','                { COMMA }
+  | '/'                { TSEP }
 
   | '('                { LPAREN }
   | ')'                { RPAREN }
 
-  | '?'                { EOL }
+  | '.'                { DOT }
   | eof                { raise Eof }

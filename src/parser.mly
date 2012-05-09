@@ -7,10 +7,9 @@
 %token <string> IDENT
 %token <int> NUM
 %token ASSUME EQ CHECK WHNF ID INFER SHOW QUIT
-%token COLON DOT 
+%token COLON DOT COMMA TSEP
 %token LAM PI PROP TYPE
 %token LPAREN RPAREN
-%token LBRACKET RBRACKET
 %token LT GT
 %token EOL
 %start global
@@ -18,7 +17,7 @@
 %%
 
 global: 
-  global_elem EOL {$1}
+  global_elem DOT {$1}
 ;
 
 global_elem:
@@ -32,23 +31,18 @@ global_elem:
 ;
 
 
-universe_vars:
-| LT number GT    { Uint $2 }
-| LT ident  GT    { Uvar $2 }    
-;
-
 sorts: 
-| PROP                         { Prop }
-| TYPE universe_vars           { Type $2 } 
+| PROP             { Prop }
+| TYPE TSEP number { Type (Uint $3) } 
 ;
 
 term:
-| LPAREN term RPAREN             { $2 } 
-| ident                          { Var $1 }
-| sorts                          { Sort $1 }
-| LAM ident COLON term DOT term  { Lam ($2,$4,$6) }
-| LBRACKET term term RBRACKET    { App ($2,$3) }
-| PI ident COLON term DOT term   { Pi ($2,$4,$6) }
+| LPAREN term RPAREN               { $2 } 
+| ident                            { Var $1 }
+| sorts                            { Sort $1 }
+| PI ident COLON term COMMA term   { Pi ($2,$4,$6) }
+| LAM ident COLON term COMMA term  { Lam ($2,$4,$6) }
+| term term                        { App ($1,$2) }
 ;
 
 number:

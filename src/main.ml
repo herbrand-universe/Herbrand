@@ -13,13 +13,13 @@ let parse () =
   let rec parse_and_catch () =
     try
       let lexbuf = Lexing.from_channel stdin in
-      printf "[1][0][0]>@?";
+      printf "Herbrand>@?";
       let global = Parser.global Lexer.token lexbuf in
         process_global global;
         parse_and_catch () 
     with
       | Lexer.Eof -> exit 0 
-      | e -> (*catch_exn e *)parse_and_catch () 
+      | e -> printf "Error\n";(*catch_exn e *)parse_and_catch () 
   in parse_and_catch ()
 
 let _ = parse ()
