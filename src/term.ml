@@ -62,6 +62,17 @@ let rec dBsubs n t = function
   | Pi  (ty,t1)        -> Pi  (dBsubs n t ty, dBsubs (n+1) t t1)
   | Sort s             -> Sort s
 
+(* ****************************************************************************
+ * val whnf : term -> term
+ *
+ * Nota: Se necesita una convencion de si los indices empiezan en 0 o en 1.
+ * ***************************************************************************)
+let rec whnf = function
+  | App (t1, t2) -> 
+    (match whnf t1 with
+      | Lam (_,t)   -> whnf (dBsubs 0 t2 t) 
+      | t           -> App (t,t2))
+  | t            -> t
 
 
 
