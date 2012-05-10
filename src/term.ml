@@ -40,6 +40,10 @@ let rec subs v t = function
   | App (t1,t2)                  -> App (subs v t t1, subs v t t2)
   | term                         -> term 
 
+
+
+
+
 (*
 type rel =
   | LT
