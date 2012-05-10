@@ -6,7 +6,7 @@ open Set
  *
  *  k  ::= Prop | Type a
  *
- *  T  ::=  x | k | \x:T.T | Pi x:T.T | [ X X ]
+ *  T  ::=  x | k | L T,T | Pi T,T | [ X X ]
  *
  * ***************************************************************************)
 
@@ -45,6 +45,23 @@ let rec subs v t = function
   | Pi  (t1,t2)   -> Pi  (subs v t t1, subs v t t2)
   | App (t1,t2)   -> App (subs v t t1, subs v t t2)
   | term          -> term 
+  
+  
+(* ****************************************************************************
+ * val dBsubs : int -> term -> term -> term
+ *
+ * Nota: Ver el tema de la sustitucion adentro de los tipos de Lam y Pi 
+ *     (en el primer argumento), no se si deberia o no incrementar n.
+ * ***************************************************************************)
+let rec dBsubs n t = function
+  | Var x              -> Var x
+  | App (t1,t2)        -> App ((dBsubs n t t1) ,(dBsubs n t t2))
+  | Id k  when (k = n) -> t
+  | Id k               -> Id k
+  | Lam (ty,t1)        -> Lam (dBsubs n t ty, dBsubs (n+1) t t1) 
+  | Pi  (ty,t1)        -> Pi  (dBsubs n t ty, dBsubs (n+1) t t1)
+  | Sort s             -> Sort s
+
 
 
 
