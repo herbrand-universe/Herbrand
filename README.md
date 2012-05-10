@@ -3,20 +3,22 @@ Herbrand Universe
 
 Herbrand Universe
 
+*Complete tasks*
+   * El tipo (***astTerm***) de los terminos de entradas acepta variables para abstraciones y dependent products.
+   * En term.ml(i) hay otra defición de termino debido a que internamente usamos indices de deBrujin. Las variables se preservan pero son solo para variables globales.
+   * Cree 'val subs : name -> term -> term -> term'. No se si tiene sentido porque sobre este tipo las variables son solo globales.
+
+
 *To Do* 
-   * Crear un tipo de datos donde Pi y Lam no tomen variables. Digamos dBterm.
-   * Function to translate terms with variables in dBterms with DeBrujin index.
+   * Funcion que transforme los terminos de entra ***astTerms*** con variables dummies en ***term*** que usa indices de deBrujin.
 
 *Agregar funciones*
-   * Sustitucion de variables 'val subs : name -> term -> term -> term'
    * Sustitucion de indices deBrujin 'val subsDB : term -> term -> term'. (Los indices de deBrujin son relativos a la posición, hay un par de maneras posibles de hacer esto)
    * Agregar funcion 'val whnf : term -> term' que lleve un termino a Weak Head Normal Form.
 
 
 *Estructura de archivos*
    * term.ml 
-     * a
-     * b
    * main.ml ....
    * parser.mly ....
    * lexer.mll  ....
@@ -24,4 +26,3 @@ Herbrand Universe
 
 *Papers*
    * Type Checking with Universes (R. Harper, R. Pollack)
-   *
