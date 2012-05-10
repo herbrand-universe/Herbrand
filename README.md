@@ -24,3 +24,4 @@
 **Papers**
 ----------
    * Type Checking with Universes (R. Harper, R. Pollack)
+   * Proof-assistants using Dependent Type Systems (H. Barendregt, H. Geuvers)
