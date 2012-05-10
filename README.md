@@ -8,8 +8,8 @@
 
 **To Do** 
 ---------
-   * Funcion que transforme los terminos de entra ***astTerms*** con variables dummies en ***term*** que usa indices de deBrujin.
-   * Sustitucion de indices deBrujin 'val subsDB : term -> term -> term'. (Los indices de deBrujin son relativos a la posición, hay un par de maneras posibles de hacer esto)
+   * Función que transforme los terminos de entrada ***astTerms*** con variables dummies en **term** que usan indices de deBrujin.
+   * Sustitución de indices deBrujin 'val subsDB : term -> term -> term'. (Los indices de deBrujin son relativos a la posición, hay un par de maneras posibles de hacer esto)
    * Agregar funcion 'val whnf : term -> term' que lleve un termino a Weak Head Normal Form.
 
 
