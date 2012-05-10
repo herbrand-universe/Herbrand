@@ -25,9 +25,9 @@ type term =
   | Id    of int
   | Var   of name
   | Sort  of sort
-  | Lam   of name * term * term
+  | Lam   of term * term
   | App   of term * term
-  | Pi    of name * term * term
+  | Pi    of term * term
 
 
 (** Weak Head Normal Form*)

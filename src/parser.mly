@@ -22,27 +22,25 @@ global:
 
 global_elem:
 |  INFER term              { Ginfer $2 }
-|  EQ term term            { Geq_term ($2,$3) }
 |  CHECK term term         { Gcheck ($2,$3) }
 |  WHNF term               { Gwhnf $2 }
-|  SHOW ident              { Gshow $2 }
-|  ASSUME ident COLON term { Gassume ($2,$4) }
-|  QUIT               { Gquit }
+|  SHOW term               { Gshow $2 }
+|  QUIT                    { Gquit }
 ;
 
 
 sorts: 
-| PROP             { Prop }
-| TYPE TSEP number { Type (Uint $3) } 
+| PROP             { AProp }
+| TYPE TSEP number { AType $3 } 
 ;
 
 term:
 | LPAREN term RPAREN               { $2 } 
-| ident                            { Var $1 }
-| sorts                            { Sort $1 }
-| PI ident COLON term COMMA term   { Pi ($2,$4,$6) }
-| LAM ident COLON term COMMA term  { Lam ($2,$4,$6) }
-| term term                        { App ($1,$2) }
+| ident                            { AVar $1 }
+| sorts                            { ASort $1 }
+| PI ident COLON term COMMA term   { APi ($2,$4,$6) }
+| LAM ident COLON term COMMA term  { ALam ($2,$4,$6) }
+| term term                        { AApp ($1,$2) }
 ;
 
 number:

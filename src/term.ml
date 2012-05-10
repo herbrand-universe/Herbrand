@@ -22,23 +22,29 @@ type sort =
   | Type of universe
 
 type term =
-  | Id    of int
-  | Var   of name
+  | Id    of int              (* Indices de deBrujin *)
+  | Var   of name             (* Variables globales *)
   | Sort  of sort
-  | Lam   of name * term * term
+  | Lam   of term * term
   | App   of term * term
-  | Pi    of name * term * term
+  | Pi    of term * term
 
 
 
-(** subs v N M is M[x/N] *)
-(* TODO: Captura variables ...  *)
+(* ****************************************************************************
+ * val subs : name -> term -> term -> term
+ * 
+ * Se entiende como "subs v N M" es  "M[x/N]"
+ *
+ * Nota: Dado que las variables son unicamente globales, no se si tiene 
+ *     sentido ahora tener sustitucion de variables
+ * ***************************************************************************)
 let rec subs v t = function
   | Var x          when (x = v)  -> t
-  | Lam (x,t1,t2)  when (x <> v) -> Lam (x, subs v t t1, subs v t t2)
-  | Pi  (x,t1,t2)  when (x <> v) -> Pi  (x, subs v t t1, subs v t t2)
-  | App (t1,t2)                  -> App (subs v t t1, subs v t t2)
-  | term                         -> term 
+  | Lam (t1,t2)   -> Lam (subs v t t1, subs v t t2)
+  | Pi  (t1,t2)   -> Pi  (subs v t t1, subs v t t2)
+  | App (t1,t2)   -> App (subs v t t1, subs v t t2)
+  | term          -> term 
 
 
 
