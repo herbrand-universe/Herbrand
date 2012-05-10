@@ -3,13 +3,15 @@ Herbrand Universe
 
 Herbrand Universe
 
-*Complete tasks*
+***Complete tasks***
+--------------------
    * El tipo (***astTerm***) de los terminos de entradas acepta variables para abstraciones y dependent products.
    * En term.ml(i) hay otra defición de termino debido a que internamente usamos indices de deBrujin. Las variables se preservan pero son solo para variables globales.
    * Cree 'val subs : name -> term -> term -> term'. No se si tiene sentido porque sobre este tipo las variables son solo globales.
 
 
-*To Do* 
+**To Do** 
+-------
    * Funcion que transforme los terminos de entra ***astTerms*** con variables dummies en ***term*** que usa indices de deBrujin.
 
 *Agregar funciones*
