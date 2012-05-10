@@ -1,4 +1,4 @@
-
+open Set
 (* ****************************************************************************
  * Syntax 
  *
@@ -10,17 +10,19 @@
  *
  * ***************************************************************************)
 
+type lvar = string
 type name = string
 
-type universe_vars =
+type universe =
   | Uint of int
-  | Uvar of name
+  | Uvar of lvar
 
 type sort = 
   | Prop
-  | Type of universe_vars
+  | Type of universe
 
 type term =
+  | Id    of int
   | Var   of name
   | Sort  of sort
   | Lam   of name * term * term
@@ -28,14 +30,34 @@ type term =
   | Pi    of name * term * term
 
 
-type pair =
-  | LT of name * name
-  | GT of name * name
-  | EQ of name * name
-  | LE of name * name
-  | GE of name * name
+(** Weak Head Normal Form*)
+(**)
+
+
+
+(*
+type rel =
+  | LT
+  | LE
+  | EQ
+type constr =
+  | C of rel * universe * universe
 
 type level_assignment = (name * int) list
 
-type constraints = pair list
+
+module LVar = struct
+  type t = string 
+  let compare = String.compare
+end
+
+module LVars = Set.Make( LVar )
+
+module LConstraint = struct
+  type t = constr 
+  let compare _ _ = 1 
+end
+
+module LConstraints = Set.Make ( LConstraint )
+*)
 

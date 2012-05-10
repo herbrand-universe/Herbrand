@@ -29,11 +29,13 @@ type term =
   | App   of term * term
   | Pi    of name * term * term
 
+
+
+(*
 type rel =
   | LT
   | LE
   | EQ
-(*
 type constr =
   | C of rel * universe * universe
 
