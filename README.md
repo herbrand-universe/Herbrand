@@ -3,11 +3,18 @@ Herbrand Universe
 
 Herbrand Universe
 
-*To Do*
-   * Add *infer*, *whnf*, *check* and *=* tokens.
+*Estructura de archivos*
+   * term.ml ....
+   * main.ml ....
+   * parser.mly ....
+   * lexer.mll  ....
+   * pretty.ml  ....
+
+*To Do* 
+   * Agregar funcion 'val whnf : term -> term' que lleve un termino a Weak Head Normal Form.
    * Function to translate terms with variables in terms with DeBrujin index.
-   * Bla bla bla
 
 
 *Papers*
    * Type Checking with Universes (R. Harper, R. Pollack)
+   *
