@@ -31,6 +31,15 @@ type term =
 
 
 
+(** subs v N M is M[x/N] *)
+(* TODO: Captura variables ...  *)
+let rec subs v t = function
+  | Var x          when (x = v)  -> t
+  | Lam (x,t1,t2)  when (x <> v) -> Lam (x, subs v t t1, subs v t t2)
+  | Pi  (x,t1,t2)  when (x <> v) -> Pi  (x, subs v t t1, subs v t t2)
+  | App (t1,t2)                  -> App (subs v t t1, subs v t t2)
+  | term                         -> term 
+
 (*
 type rel =
   | LT
