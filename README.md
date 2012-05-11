@@ -1,5 +1,5 @@
 
-**Complete tasks (a revisar) **
+**Complete tasks (a revisar)**
 --------------------------------
    * El tipo (**astTerm**) de los terminos de entradas acepta variables para abstraciones y dependent products.
    * En term.ml(i) hay otra defición de termino debido a que internamente usamos indices de (de Brujin). Las variables se preservan pero son solo para variables globales.
@@ -9,11 +9,7 @@
 
 **To Do** 
 ---------
-<<<<<<< HEAD
-   * Función que transforme los terminos de entrada **astTerms** con variables dummies en **term** que usan indices de deBrujin.
-=======
    * Función que transforme los terminos de entrada **astTerms** con variables dummies en **term** que usan indices de (de Bruijn).
->>>>>>> 439c8a7f430fddfe2cef7f1674b857f9d8bcc36b
    * Agregar funcion **val whnf : term -> term** que lleve un termino a Weak Head Normal Form. (In progress) 
 
 
