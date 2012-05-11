@@ -9,7 +9,7 @@
 
 **To Do** 
 ---------
-   * Función que transforme los terminos de entrada **astTerms** con variables dummies en **term** que usan indices de (de Bruijn).
+   * Función que transforme los terminos de entrada **astTerms** con variables dummies en **term** que usan indices de (de Bruijn). (In progess)
    * Agregar funcion **val whnf : term -> term** que lleve un termino a Weak Head Normal Form. (In progress) 
 
 
