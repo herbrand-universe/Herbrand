@@ -1,3 +1,4 @@
+open Ast
 open Set
 (* ****************************************************************************
  * Syntax 
@@ -74,9 +75,26 @@ let rec whnf = function
       | t           -> App (t,t2))
   | t            -> t
 
-
-
-
+(* ****************************************************************************
+ * val toDeBruijn : astTerm -> term
+ *
+ * Nota: Se necesita una convencion de si los indices empiezan en 0 o en 1.
+ * ***************************************************************************)
+let toDeBruijn =
+  let rec index_of e i = function
+    | [] -> None
+    | x :: xs -> if x == e then Some i else index_of e (i+1) xs
+  in
+  let rec toDeBruijnCtx ctx = function
+    | AVar n -> (match index_of n 1 ctx with
+      | None -> Var n
+      | Some i -> Id i)
+    | ASort AProp -> Sort Prop
+    | ASort (AType n) -> Sort (Type (Uint n))
+    | ALam (n, at, at') -> Lam (toDeBruijnCtx (n::ctx) at, toDeBruijnCtx (n::ctx) at')
+    | APi (n, at, at') -> Pi (toDeBruijnCtx (n::ctx) at, toDeBruijnCtx (n::ctx) at')
+    | AApp (at, at') -> App (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
+  in toDeBruijnCtx []
 
 (*
 type rel =
