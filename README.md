@@ -15,8 +15,9 @@ Si llegas a ponerte con algo de eso, avisame para no hacer lo mismo los dos ..
 
 Solo para mostrarte un ejemplo de como usar variables globales (robado de EasyCrypt asi no pienso)
 
-let rhl_cntr = ref 0
-let fresh_rhl_cntr () = incr rhl_cntr; !rhl_cntr
+**let rhl_cntr = ref 0**
+
+**let fresh_rhl_cntr () = incr rhl_cntr; !rhl_cntr**
 
 rhl_cntr , sería como un puntero con ! te da el valor. Si lo pasas a string y le concatenas "x" tenemos variables frescas.
 
