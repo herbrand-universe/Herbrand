@@ -1,4 +1,3 @@
-**Esto crece fácil ... moví las cosas a la Wiki. Dejé por ahora las cosas pendientes así estan visibles**
 
 **E: Voy a ponerme en estos dias a intentar escribir la tabla 5 'Schematic beta-conversion algorithm', es decir sobre constraint.ml**
 Si llegas a ponerte con algo de eso, avisame para no hacer lo mismo los dos ..
@@ -13,13 +12,3 @@ Si llegas a ponerte con algo de eso, avisame para no hacer lo mismo los dos ..
    * Tener una función que genere variables frescas (se va a necesitar para generar 'level variables' en varias reglas (algo que genere x1, x2, x3 .. estimo que basta)
    * Se pueden definir las dos funciones auxiliares CUM y flecha.
 
-
-**Solo para mostrarte un ejemplo de como usar variables globales (robado, asi no pienso)**
-***
-**let rhl_cntr = ref 0**
-
-**let fresh_rhl_cntr () = incr rhl_cntr; !rhl_cntr**
-
-rhl_cntr , sería como un puntero con ! te da el valor. Si lo pasas a string y le concatenas "x" tenemos variables frescas.
-
-PD: rhl ... relational hoare logic ): 
