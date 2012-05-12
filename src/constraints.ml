@@ -175,6 +175,7 @@ let rec downArr t1 t2 = match whnf t1,whnf t2 with
   | App   (x1,x2), App (y1,y2)     -> LConstraints.union (downArr x1 y1) (downArr x2 y2)
   | Var x, Var y when (x = y)      -> LConstraints.empty
   | Id  x , Id y when (x = y)      -> LConstraints.empty
+  | Sort (Prop), Sort (Prop)       -> LConstraints.empty
   | _                              -> raise ConvFail
 
 

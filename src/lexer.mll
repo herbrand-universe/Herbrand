@@ -16,6 +16,7 @@ let tactics_keywords =
 let global_keywords = 
   [
     "check",   CHECK;
+    "with",    WITH;
     "whnf",    WHNF;
     "assume",  ASSUME;
     "show" ,   SHOW;
