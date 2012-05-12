@@ -79,3 +79,45 @@ let rec domLA = function
 
 
 
+(* ****************************************************************************
+ * val lvalue : lassignment -> lvar -> int
+ *
+ * Note: Only use 'lvalue' after check if var x exists in the domain of 'la'
+ *    otherwise, catch the exception ...
+ * ***************************************************************************)
+let lvalue la = function
+  | Uvar x       -> List.assoc x la (*You must check if x is in the domain *)
+  | Uint n       -> n
+
+
+(* ****************************************************************************
+ * val check_inequality : lassignment -> constr -> bool
+ *
+ * Note: Only use 'check_inequality' after check that all level variables are
+ *    in the domain of 'la'  otherwise, catch the exception ...
+ * ***************************************************************************)
+let check_inequality la = function
+  | C (LT,t1,t2) -> (lvalue la t1) <  (lvalue la t2)
+  | C (LE,t1,t2) -> (lvalue la t1) <= (lvalue la t2)
+  | C (EQ,t1,t2) -> (lvalue la t1) =  (lvalue la t2)
+
+
+
+(* ****************************************************************************
+ * val check_inequalities : lassignment -> LConstraints -> bool
+ *
+ * Note: Only use 'check_inequalities' after check that all level variables are
+ *    in the domain of 'la'  otherwise, catch the exception ...
+ * ***************************************************************************)
+let check_inequalities la lconst = 
+  LConstraints.for_all (check_inequality la) lconst
+
+(* ****************************************************************************
+ * val satisfies : lassignment -> LConstraints -> bool
+ *
+ * Note: We assume that (&&) is lazy otherwise ... err ...
+ * ***************************************************************************)
+let satisfies la const =
+  (LVars.subset (constrLV const) (domLA la))
+  && (check_inequalities la const)
+
