@@ -102,7 +102,6 @@ let check_inequality la = function
   | C (EQ,t1,t2) -> (lvalue la t1) =  (lvalue la t2)
 
 
-
 (* ****************************************************************************
  * val check_inequalities : lassignment -> LConstraints -> bool
  *

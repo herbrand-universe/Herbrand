@@ -2,6 +2,7 @@ open Ast
 open Term
 open Format
 open Pretty
+open Tests (* Al incluirlo se van a ejecutar los tests *)
 
 (* Aca empieza todo a fines practicos *)
 let main = function
