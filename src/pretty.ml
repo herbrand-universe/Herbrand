@@ -14,11 +14,11 @@ let rec pp_astTerm fmt = function
   | AVar name        -> fprintf fmt "%s" name
   | ASort s          -> fprintf fmt "%a" pp_sort2 s
   | ALam  (s,t1, t2) -> 
-    fprintf fmt "\\%s : (%a) . (%a)" s pp_astTerm t1 pp_astTerm t2
+    fprintf fmt "L %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
   | AApp  (t1 , t2) -> 
     fprintf fmt "[(%a) (%a)]" pp_astTerm t1 pp_astTerm t2
   | APi (s,t1,t2) -> 
-    fprintf fmt "Pi %s : (%a) . (%a)" s pp_astTerm t1 pp_astTerm t2
+    fprintf fmt "P %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
 
 
 let pp_sort fmt = function
@@ -33,11 +33,11 @@ let rec pp_term fmt = function
   | Sort s          -> fprintf fmt "%a" pp_sort s
   | Id n            -> fprintf fmt "%d" n
   | Lam  (t1, t2) -> 
-    fprintf fmt "\\ (%a) . (%a)" pp_term t1 pp_term t2
+    fprintf fmt "L (%a) , (%a)" pp_term t1 pp_term t2
   | App  (t1 , t2) -> 
     fprintf fmt "[(%a) (%a)]" pp_term t1 pp_term t2
   | Pi (t1,t2) -> 
-    fprintf fmt "Pi (%a) . (%a)" pp_term t1 pp_term t2
+    fprintf fmt "P (%a) , (%a)" pp_term t1 pp_term t2
 
 let pp_global fmt = function
   | _                -> ()

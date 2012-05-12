@@ -120,3 +120,26 @@ let satisfies la const =
   (LVars.subset (constrLV const) (domLA la))
   && (check_inequalities la const)
 
+
+
+open Format
+
+(* Deriving 'show' :P*)
+let pp_lvar fmt = function
+  | Uvar x   -> fprintf fmt "%s" x
+  | Uint n   -> fprintf fmt "%d" n
+
+let pp_constr fmt = function 
+  | C (LT, t1 ,t2) -> fprintf fmt "[%a <  %a]" pp_lvar t1 pp_lvar t2
+  | C (LE, t1 ,t2) -> fprintf fmt "[%a <= %a]" pp_lvar t1 pp_lvar t2
+  | C (EQ, t1 ,t2) -> fprintf fmt "[%a =  %a]" pp_lvar t1 pp_lvar t2
+
+let pp_lconstr fmt lconstr =
+  let pp_aux e = pp_constr fmt e
+  in
+    fprintf fmt "{";
+    LConstraints.iter pp_aux lconstr;
+    fprintf fmt "}"
+
+
+
