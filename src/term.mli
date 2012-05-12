@@ -1,4 +1,10 @@
+(* ****************************************************************************
+ *   Term solo deberia tener definiciones de tipos (creo):
+ * El motivo principal es evitar inclusiones recursivas con otros archivos.
+ * Cuando haya mas cosas, term.ml deberia desaparecer y ser solo term.mli
+ * ***************************************************************************)
 open Set
+
 (* ****************************************************************************
  * Syntax 
  *

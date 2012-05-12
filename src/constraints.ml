@@ -1,12 +1,15 @@
+(* ****************************************************************************
+ *   Esto deberia abstraer todo lo que use 'constraints'.
+ *  Ahora tambien incluye todo lo relacionado con 'level variables'. Si en 
+ *  algun momento el manejo de 'level variables' crece, creamos otro archivo
+ *  para universos y separamos un poco la parte de 'constraints' de lo otro.
+ * ***************************************************************************)
 open Term
 
 type rel =
   | LT
   | LE
   | EQ
-
-type constr =
-  | C of rel * Term.universe * Term.universe
 
 type lassignment = (Term.name * int) list
 
@@ -17,6 +20,9 @@ module LVar = struct
 end
 
 (** One constraint *)
+type constr =
+  | C of rel * Term.universe * Term.universe
+
 module LConstraint = struct
   type t = constr 
   let compare _ _ = 1  (* Completar *)
@@ -70,9 +76,6 @@ let constrLV set =
 let rec domLA = function
   | []           -> LVars.empty
   | (lv,n) :: xs -> LVars.add lv (domLA xs)
-
-
-
 
 
 
