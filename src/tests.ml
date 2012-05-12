@@ -38,6 +38,12 @@ let la5a = [("x",2); ("y",3); ("b",1)]
 (* Tests sobre 'check_inequality'*)
 let _ = assert (check_inequality la1a rel1a)
 let _ = assert (not (check_inequality la2a rel1b))
+let _ = assert (not (check_inequality la3a rel1c))
+let _ = assert (not (check_inequality la4a rel1c))
+let _ = assert (not (check_inequality la5a rel1c))
+
+(*Not_found exception
+ let _ = assert (not (check_inequality la1a rel1c))*)
 
 
 (* To Be Continued ... *)
