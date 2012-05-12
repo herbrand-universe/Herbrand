@@ -160,6 +160,25 @@ let upArr c = function
   | Type l, Type m -> let a = freshLV () in
     Type a, LConstraints.add (C(LE, l, a)) (LConstraints.add (C(LE, m, a)) c)
 
+
+
+(* ****************************************************************************
+ * val downArr : term -> term -> LConstraints
+ *
+ * Return the weakest constraint set or raise an exception (ConvFail)
+ * ***************************************************************************)
+exception ConvFail 
+let rec downArr t1 t2 = match whnf t1,whnf t2 with
+  | Sort (Type a), Sort (Type b)   -> LConstraints.add (C (EQ,a,b)) LConstraints.empty
+  | Pi    (x1,x2), Pi (y1,y2)      -> LConstraints.union (downArr x1 y1) (downArr x2 y2)
+  | Lam   (x1,x2), Lam (y1,y2)     -> LConstraints.union (downArr x1 y1) (downArr x2 y2)
+  | App   (x1,x2), App (y1,y2)     -> LConstraints.union (downArr x1 y1) (downArr x2 y2)
+  | Var x, Var y when (x = y)      -> LConstraints.empty
+  | Id  x , Id y when (x = y)      -> LConstraints.empty
+  | _                              -> raise ConvFail
+
+
+
 open Format
 
 (* Deriving 'show' :P*)
