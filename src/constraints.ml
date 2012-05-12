@@ -138,6 +138,17 @@ let satisfies la const =
   && (check_inequalities la const)
 
 (* ****************************************************************************
+ * val cum : LConstraints -> term -> term * LConstraints
+ *
+ *
+ * ***************************************************************************)
+let cum c x = match whnf x with
+  | (Sort (Type l)) -> let a = freshLV () in
+    (Sort (Type a)), LConstraints.add (C(LE, l, a)) c
+  | _ -> x, c
+
+
+(* ****************************************************************************
  * val upArr : LConstraints -> sort * sort -> sort * LConstraints
  *
  *

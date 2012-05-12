@@ -41,6 +41,7 @@ val toDeBruijn : Ast.astTerm -> term
 
 (** Weak Head Normal Form*)
 (**)
+val whnf : term -> term
 
 
 
