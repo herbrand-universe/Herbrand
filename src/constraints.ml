@@ -48,6 +48,23 @@ let rec termLV = function
   | App (t1,t2) -> LVars.union (termLV t1) (termLV t2)
   | _           -> LVars.empty
 
+(* ****************************************************************************
+ * val lastLV : int ref
+ *
+ * Accumulates the last count value in the fresh level variables sequence
+ *
+ * ***************************************************************************)
+let lastLV = ref 0
+
+(* ****************************************************************************
+ * val  : () -> int
+ *
+ * Gives a new fresh level variable
+ *
+ * ***************************************************************************)
+let freshLV () = incr lastLV; Uvar ("x" ^ string_of_int !lastLV)
+
+
 
 (* ****************************************************************************
  * val constrLV : LConstraints -> LVars 
@@ -120,7 +137,17 @@ let satisfies la const =
   (LVars.subset (constrLV const) (domLA la))
   && (check_inequalities la const)
 
-
+(* ****************************************************************************
+ * val upArr : LConstraints -> sort * sort -> sort * LConstraints
+ *
+ *
+ * ***************************************************************************)
+let upArr c = function
+  | _, Prop -> Prop, c
+  | Prop, Type l -> let a = freshLV () in
+    Type a, LConstraints.add (C(LE, l, a)) c
+  | Type l, Type m -> let a = freshLV () in
+    Type a, LConstraints.add (C(LE, l, a)) (LConstraints.add (C(LE, m, a)) c)
 
 open Format
 
