@@ -24,7 +24,7 @@ type sort =
   | Type of universe
 
 type term =
-  | Id    of int              (* Indices de deBrujin *)
+  | Id    of int              (* Indices de deBruijn *)
   | Var   of name             (* Variables globales *)
   | Sort  of sort
   | Lam   of term * term
@@ -67,7 +67,7 @@ let rec dBsubs n t = function
 (* ****************************************************************************
  * val whnf : term -> term
  *
- * Nota: Se necesita una convencion de si los indices empiezan en 0 o en 1.
+ * Nota: \x -> x = \ 1  (Los indices empiezan en 1)
  * ***************************************************************************)
 let rec whnf = function
   | App (t1, t2) -> 
@@ -79,7 +79,7 @@ let rec whnf = function
 (* ****************************************************************************
  * val toDeBruijn : astTerm -> term
  *
- * Nota: Se necesita una convencion de si los indices empiezan en 0 o en 1.
+ * Nota: \x -> x = \ 1  (Los indices empiezan en 1)
  * ***************************************************************************)
 let toDeBruijn =
   let rec index_of e i = function
@@ -96,30 +96,4 @@ let toDeBruijn =
     | APi (n, at, at') -> Pi (toDeBruijnCtx ctx at, toDeBruijnCtx (n::ctx) at')
     | AApp (at, at') -> App (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
   in toDeBruijnCtx []
-
-(*
-type rel =
-  | LT
-  | LE
-  | EQ
-type constr =
-  | C of rel * universe * universe
-
-type level_assignment = (name * int) list
-
-
-module LVar = struct
-  type t = string 
-  let compare = String.compare
-end
-
-module LVars = Set.Make( LVar )
-
-module LConstraint = struct
-  type t = constr 
-  let compare _ _ = 1 
-end
-
-module LConstraints = Set.Make ( LConstraint )
-*)
 

@@ -5,9 +5,9 @@ open Pretty
 
 (* Aca empieza todo a fines practicos *)
 let main = function
- | Gshow t            -> Format.printf "%a@\n" pp_term (toDeBruijn t)
- | Gquit               -> raise Lexer.Eof
- | g -> Format.printf "Termino = [%a] @." pp_global g 
+ | Gshow t           -> Format.printf "%a@\n" pp_term (toDeBruijn t)
+ | Gquit             -> raise Lexer.Eof
+ | _                 -> () 
 
 
 

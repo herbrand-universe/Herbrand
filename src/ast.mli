@@ -12,8 +12,8 @@ type astTerm =
   | APi    of name * astTerm * astTerm
 
 type global = 
-   | Ginfer   of astTerm
-   | Gshow    of astTerm
-   | Gwhnf    of astTerm
-   | Gcheck   of astTerm * astTerm
-   | Gquit
+  | Ginfer   of astTerm
+  | Gshow    of astTerm
+  | Gwhnf    of astTerm
+  | Gcheck   of astTerm * astTerm
+  | Gquit
