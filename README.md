@@ -14,7 +14,7 @@ Si llegas a ponerte con algo de eso, avisame para no hacer lo mismo los dos ..
    * Se pueden definir las dos funciones auxiliares CUM y flecha.
 
 
-**Solo para mostrarte un ejemplo de como usar variables globales (robado de EasyCrypt asi no pienso)**
+**Solo para mostrarte un ejemplo de como usar variables globales (robado, asi no pienso)**
 ***
 **let rhl_cntr = ref 0**
 
