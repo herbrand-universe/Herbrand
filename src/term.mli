@@ -30,6 +30,9 @@ type term =
   | Pi    of term * term
 
 
+
+val toDeBruijn : Ast.astTerm -> term
+
 (** Weak Head Normal Form*)
 (**)
 
