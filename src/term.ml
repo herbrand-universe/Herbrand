@@ -77,7 +77,7 @@ let rec dBsubs n t = function
 let rec whnf = function
   | App (t1, t2) -> 
     (match whnf t1 with
-      | Lam (_,t)   -> whnf (dBsubs 0 t2 t) 
+      | Lam (_,t)   -> whnf (dBsubs 1 t2 t) 
       | t           -> App (t,t2))
   | t            -> t
 

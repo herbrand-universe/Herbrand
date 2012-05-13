@@ -8,6 +8,7 @@ open Tests (* Al incluirlo se van a ejecutar los tests *)
 (* Aca empieza todo a fines practicos *)
 let main = function
  | Gshow t           -> Format.printf "%a@\n" pp_term (toDeBruijn t)
+ | Gwhnf t           -> Format.printf "%a@\n" pp_term (whnf (toDeBruijn t))
  | Gcheck (t1,t2)    -> Format.printf "%a@\n" pp_lconstr (downArr (toDeBruijn t1) (toDeBruijn t2))
  | Gquit             -> raise Lexer.Eof
  | _                 -> () 
