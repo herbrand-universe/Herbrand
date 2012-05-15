@@ -11,7 +11,7 @@
 ***
    * Agregar un chequeo de que el constraint final son satisfacibles..
 
-**¿Ahora que haces?**
+**¿Ahora que hacemos?**
 ***
 
   (a) Ordenamos
@@ -21,20 +21,35 @@
   (b) Ambiguamos los universos.
       * G: Es lo más simple de continua, pero es como que no lo vemos funcionar (ni siquiera se como chequear que esta bien). No tengo muchos ejemplos.
       * E: Podemos jugar un poco más con esto antes creo.
+
   (c) Vemos que hay que hacer para agregar definiciones (Assume es unsafe)
       * G: Por ahora **assume** agrega cosas, quizás solo tengamos que tiparlas antes de meterlas en el contexto.
       * E: Si, ¿por qué generaría problemas?
+        * G: Si no las tipas es obvio que podes meter falso. Además de tipar quizás haya que hacer algo más (no se). (siempre hablando sin recursion)
+
   (d) Definimos un lenguaje (el formato del script)
       * G: La sintaxis es cualquiera, todavía no se porque puse **with** en lugar de **=**. Si definimos un poco la sintaxis, le puedo hacer el modo de PG.
          Y más allá de eso, si definimos la sintaxis estamos obligados a definir para que vamos usar el typechecker. Existen proof assistants sin *tacticas* ?...
       * E: Sí, hay que fijar eso.
+
   (e) Pensamos como definir una lógica
       * G: En el contexto usando la idea de **Logical framework** podes usar **shallow embedding** para definir la lógica que te de la gana. O podes agregar al lenguaje
       algunas funciones /\, \/ .... y definirlas de manera 'fija' usando teoria de tipo
       * E: ¿Dónde puedo leer sobre eso del **shallow embedding**? Creo que sería lo más divertido (aún sin saber qué es) poder definir lógicas que se nos canten.
+         * G: Es lo que se hace habitualmente creo, Coq se que puede cambiar el significado de el 'and', 'or' y demás.
+
   (f) Vemos como se agregaría tacticas.
       * G: Si nos ponemos con esto, esta bueno porque vamos podiendo **usar** el typechecker, aunque hay que pensar bien esto ... 
       * E: No me parece trivial, ¿haríamos un lenguaje para escribit tácticas después? ¿O qué?
+
+        * G : Las únicas tácticas que vi son las de EasyCrypt, jamás use Coq. 
+        En EC las tienen codiadas en ocaml, pero hay dos clases de tácticas 
+        las básicas y la que son composiciones de tácticas, esas estimo que 
+        es fácil permitir que el usuario las cree pero ni idea. Se que el 
+        tipo de Matita (Asperi, creo) tiene slides o un paper criticando 
+        las tácticas de Coq, y explica algunas cosas ... pero no lo lei bien.
+           Asi que lo más fácil es agregar tácticas y definirlas en OCaml.
+
   (g) Otras
       * G: Podría ser definiciones recursivas.
       * E: 
