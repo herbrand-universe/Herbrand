@@ -1,7 +1,6 @@
 open Array
 open Constraints
 open List
-open Printf
 open Term
 
 
@@ -20,6 +19,8 @@ let add_elem xs = function
 let make_nodes c = let f (C(_,s,d)) xs = add_elem (add_elem xs s) d in
                    LConstraints.fold f c []
 
+exception Error
+
 let make_edge = function
                   | C(LE, Uvar u, Uvar v) -> (u, v, 0)
                   | C(LE, Uint i, Uvar v) -> ("d0", v, -i)
@@ -27,6 +28,7 @@ let make_edge = function
                   | C(LT, Uvar u, Uvar v) -> (u, v, -1)
                   | C(LT, Uint i, Uvar v) -> ("d0", v, -(i + 1))
                   | C(LT, Uvar u, Uint j) -> (u, "d0", j - 1)
+                  | _ -> raise Error
 
 
 (* ****************************************************************************
@@ -65,9 +67,13 @@ let make_edges cs = let cs = normalize cs in
                     let f c gr = (make_edge c) :: gr in
                     LConstraints.fold f cs []
 
-let relax ns d (u, v, w) = (if (d.(pos v ns) > d.(pos u ns) + w) then (d.(pos v ns) <- (d.(pos u ns) + w)))
-let check_cond ns d (u, v, w) = d.(pos v ns) <= d.(pos u ns) + w
+let make_positives ns es = let f v ls = ("d0", v, 0) :: ls in
+                           List.fold_right f ns es
 
+let relax ns d (u, v, w) = if d.(pos v ns) > d.(pos u ns) + w then
+                             d.(pos v ns) <- d.(pos u ns) + w
+
+let check_cond ns d (u, v, w) = d.(pos v ns) <= d.(pos u ns) + w
 
 (* ****************************************************************************
  * val has_negative_cycle : int array array -> bool
@@ -75,7 +81,7 @@ let check_cond ns d (u, v, w) = d.(pos v ns) <= d.(pos u ns) + w
  * returns whether the graph has a negative cycle
  *
  * ***************************************************************************)
-let has_negative_cycle ns es = let d = Array.make (length ns) 10000 in
+let has_negative_cycle ns es = let d = Array.make (length ns) 0 in
                                d.(0) <- 0 ;
                                for i = 1 to length ns - 1 do
                                   List.iter (relax ns d) es;
@@ -90,11 +96,9 @@ let has_negative_cycle ns es = let d = Array.make (length ns) 10000 in
  *
  * ***************************************************************************)
 
-
-
-
 let satisfiable cs = match check_and_remove_arith cs with
                      | None -> false
                      | Some c -> let es = make_edges cs in
                                  let ns = "d0" :: make_nodes cs in
+                                 let es = make_positives ns es in
                                  has_negative_cycle ns es

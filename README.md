@@ -16,31 +16,33 @@
 
   (a) Ordenamos
       * G: Si no te jode que cambie el código cada tanto, lo voy haciendo mientras hacemos otras cosas. 
-      * E:
+      * E: Sí, me parece bien, yo voy a hacer lo propio.
 
   (b) Ambiguamos los universos.
       * G: Es lo más simple de continua, pero es como que no lo vemos funcionar (ni siquiera se como chequear que esta bien). No tengo muchos ejemplos.
-      * E: 
+      * E: Podemos jugar un poco más con esto antes creo.
   (c) Vemos que hay que hacer para agregar definiciones (Assume es unsafe)
       * G: Por ahora **assume** agrega cosas, quizás solo tengamos que tiparlas antes de meterlas en el contexto.
-      * E:
+      * E: Si, ¿por qué generaría problemas?
   (d) Definimos un lenguaje (el formato del script)
       * G: La sintaxis es cualquiera, todavía no se porque puse **with** en lugar de **=**. Si definimos un poco la sintaxis, le puedo hacer el modo de PG.
          Y más allá de eso, si definimos la sintaxis estamos obligados a definir para que vamos usar el typechecker. Existen proof assistants sin *tacticas* ?...
-      * E:
+      * E: Sí, hay que fijar eso.
   (e) Pensamos como definir una lógica
       * G: En el contexto usando la idea de **Logical framework** podes usar **shallow embedding** para definir la lógica que te de la gana. O podes agregar al lenguaje
       algunas funciones /\, \/ .... y definirlas de manera 'fija' usando teoria de tipo
-      * E:
+      * E: ¿Dónde puedo leer sobre eso del **shallow embedding**? Creo que sería lo más divertido (aún sin saber qué es) poder definir lógicas que se nos canten.
   (f) Vemos como se agregaría tacticas.
       * G: Si nos ponemos con esto, esta bueno porque vamos podiendo **usar** el typechecker, aunque hay que pensar bien esto ... 
-      * E:
+      * E: No me parece trivial, ¿haríamos un lenguaje para escribit tácticas después? ¿O qué?
   (g) Otras
       * G: Podría ser definiciones recursivas.
-      * E:
+      * E: 
 
 G: Mi prioridad sería, (c) para empezar a crear algunos tipos y poder probar un poco y (b) porque type/n es un garron (aunque no se si lo usariamos, no se ni para que usarlo).
    Podría cambiar el orden por (b) por (c) para seguir el paper. Pero estaría bueno **usarlo** de alguna manera (aunque no se como)
+
+E: Coincido en empezar con (c), y pulir un poco usando (d).  Una vez que tengamos lo mismo, pero más prolijito, ahí me parece bien ir por (b) y (e).
 
 
 **Limpieza**
