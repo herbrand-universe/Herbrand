@@ -1,6 +1,7 @@
 open Array
 open Constraints
 open List
+open Printf
 open Term
 
 
@@ -8,38 +9,25 @@ let rec index_of e i = function
   | [] -> None
   | x :: xs -> if x = e then Some i else index_of e (i+1) xs
 
-let cmp = function
-  | C (c, _, _) -> c
-
-let src = function
-  | C (_, s, _) -> s
-
-let dst = function
-  | C(_, _, d) -> d
-
-let pos e xs = match index_of e 1 xs with
+let pos e xs = match index_of e 0 xs with
   | None -> 0 (* this should not happen *)
   | Some i -> i
 
-let init_graph c = let nelem = 1 + LConstraints.cardinal c
-                   in make_matrix nelem nelem 0
-
-let set_node ls gr = function
-                  | C(LE, Uvar u, Uvar v) -> gr.(pos u ls).(pos v ls) <- 0
-                  | C(LE, Uint i, Uvar v) -> gr.(0).(pos v ls) <- i
-                  | C(LE, Uvar u, Uint j) -> gr.(pos u ls).(0) <- (-j)
-                  | C(LT, Uvar u, Uvar v) -> gr.(pos u ls).(pos v ls) <- 1
-                  | C(LT, Uint i, Uvar v) -> gr.(0).(pos v ls) <- (i + 1)
-                  | C(LT, Uvar u, Uint j) -> gr.(pos u ls).(0) <- (1 - j)
-
 let add_elem xs = function
   | Uint _ -> xs
-  | Uvar e -> (match index_of e 0 xs with
-    | None -> e :: xs
-    | Some _ -> xs)
+  | Uvar e -> if mem e xs then xs else e :: xs
 
-let make_list c = let f c xs = add_elem (add_elem xs (src c)) (dst c) in
-                  LConstraints.fold f c []
+let make_nodes c = let f (C(_,s,d)) xs = add_elem (add_elem xs s) d in
+                   LConstraints.fold f c []
+
+let make_edge = function
+                  | C(LE, Uvar u, Uvar v) -> (u, v, 0)
+                  | C(LE, Uint i, Uvar v) -> ("d0", v, -i)
+                  | C(LE, Uvar u, Uint j) -> (u, "d0", j)
+                  | C(LT, Uvar u, Uvar v) -> (u, v, -1)
+                  | C(LT, Uint i, Uvar v) -> ("d0", v, -(i + 1))
+                  | C(LT, Uvar u, Uint j) -> (u, "d0", j - 1)
+
 
 (* ****************************************************************************
  * val normalize : LConstraints -> LConstraints
@@ -73,18 +61,26 @@ let check_and_remove_arith c = let f c cs = (match cs with
  * returns the corresponding graph from a set of constraints
  *
  * ***************************************************************************)
-let make_graph c = let c = normalize c in
-                   let gr = init_graph c in
-                   let ls = make_list c in
-                   LConstraints.iter (set_node ls gr) c
+let make_edges cs = let cs = normalize cs in
+                    let f c gr = (make_edge c) :: gr in
+                    LConstraints.fold f cs []
+
+let relax ns d (u, v, w) = (if (d.(pos v ns) > d.(pos u ns) + w) then (d.(pos v ns) <- (d.(pos u ns) + w)))
+let check_cond ns d (u, v, w) = d.(pos v ns) <= d.(pos u ns) + w
+
 
 (* ****************************************************************************
- * val has_positive_cycle : int array array -> bool
+ * val has_negative_cycle : int array array -> bool
  *
- * returns whether the graph has a positive cycle
+ * returns whether the graph has a negative cycle
  *
  * ***************************************************************************)
-let has_positive_cycle gr = true
+let has_negative_cycle ns es = let d = Array.make (length ns) 10000 in
+                               d.(0) <- 0 ;
+                               for i = 1 to length ns - 1 do
+                                  List.iter (relax ns d) es;
+                               done;
+                               for_all (check_cond ns d) es
 
 
 (* ****************************************************************************
@@ -93,6 +89,12 @@ let has_positive_cycle gr = true
  * returns whether the set of contraints is satisfiable or not
  *
  * ***************************************************************************)
-let satisfiable c = match check_and_remove_arith c with
-                    | None -> false
-                    | Some c -> has_positive_cycle (make_graph c)
+
+
+
+
+let satisfiable cs = match check_and_remove_arith cs with
+                     | None -> false
+                     | Some c -> let es = make_edges cs in
+                                 let ns = "d0" :: make_nodes cs in
+                                 has_negative_cycle ns es
