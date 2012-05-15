@@ -42,8 +42,10 @@ val toDeBruijn : Ast.astTerm -> term
 (** Weak Head Normal Form*)
 (**)
 val whnf : term -> term
-
-
+val whnf_is_kind : term -> bool
+val get_whnf_kind : term -> sort
+val get_whnf_pi : term -> term * term
+val dBsubs : int -> term -> term -> term
 
 (*
 type rel =

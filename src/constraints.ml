@@ -6,10 +6,7 @@
  * ***************************************************************************)
 open Term
 
-type rel =
-  | LT
-  | LE
-  | EQ
+type rel = LT | LE | EQ
 
 type lassignment = (Term.name * int) list
 
@@ -178,6 +175,17 @@ let rec downArr t1 t2 = match whnf t1,whnf t2 with
   | Sort (Prop), Sort (Prop)       -> LConstraints.empty
   | _                              -> raise ConvFail
 
+
+
+let empty () = LConstraints.empty
+let add a b = LConstraints.add a b
+let union a b = LConstraints.union a b
+let lt a b = LConstraints.add (C (LT,a,b)) LConstraints.empty
+let le a b = LConstraints.add (C (LE,a,b)) LConstraints.empty
+let eq a b = LConstraints.add (C (EQ,a,b)) LConstraints.empty
+let (<.) a b = lt a b
+let (<=.) a b = le a b
+let (=.) a b = eq a b
 
 
 open Format

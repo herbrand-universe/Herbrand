@@ -102,3 +102,13 @@ let toDeBruijn =
     | AApp (at, at') -> App (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
   in toDeBruijnCtx []
 
+let whnf_is_kind t = match whnf t with
+  | Sort t1        -> true
+  | _              -> false
+
+let get_whnf_kind t = match whnf t with
+  | Sort t1         -> t1
+
+let get_whnf_pi t = match whnf t with
+  | Pi (a,b) -> a,b
+

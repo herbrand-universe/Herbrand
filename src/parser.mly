@@ -21,6 +21,7 @@ global:
 ;
 
 global_elem:
+|  ASSUME ident WITH term  { Gassume ($2,$4) }
 |  INFER term              { Ginfer $2 }
 |  CHECK term WITH term    { Gcheck ($2,$4) }
 |  WHNF term               { Gwhnf $2 }
