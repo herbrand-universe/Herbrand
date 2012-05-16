@@ -18,4 +18,4 @@ let inGlobal c n = List.mem_assoc n c.global
 
 let getGlobal c n = List.assoc n c.global
 
-let getLocal  c i = Format.printf "<%d>" (List.length c.local); List.nth c.local (i-1)
+let getLocal  c i = List.nth c.local (i-1)
