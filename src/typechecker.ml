@@ -18,6 +18,47 @@ let typeofSorts c = function
 (* Instead of using the option type, here we use exception ... *)
 exception Error
 
+(* ****************************************************************************
+ * val cum : LConstraints -> term -> term * LConstraints
+ *
+ *
+ * ***************************************************************************)
+let cum c x = match whnf x with
+  | (Sort (Type l)) -> 
+    let a = Constraints.freshLV () in Sort (Type a), Constraints.union (l <=. a) c
+  | _ -> x, c
+
+
+(* ****************************************************************************
+ * val upArr : LConstraints -> sort * sort -> sort * LConstraints
+ *
+ *
+ * ***************************************************************************)
+let upArr c = function
+  | _, Prop -> Prop, c
+  | Prop, Type l -> let a = Constraints.freshLV () in
+    Type a, Constraints.union (l <=. a) c
+  | Type l, Type m -> let a = Constraints.freshLV () in
+    Type a, Constraints.union (l <=. a) (Constraints.union (m <=. a) c)
+
+
+(* ****************************************************************************
+ * val downArr : term -> term -> LConstraints
+ *
+ * Return the weakest constraint set or raise an exception (ConvFail)
+ * ***************************************************************************)
+exception ConvFail 
+let rec downArr t1 t2 = match whnf t1,whnf t2 with
+  | Sort (Type a), Sort (Type b)   -> a =. b
+  | Pi    (x1,x2), Pi (y1,y2)      -> Constraints.union (downArr x1 y1) (downArr x2 y2)
+  | Lam   (x1,x2), Lam (y1,y2)     -> Constraints.union (downArr x1 y1) (downArr x2 y2)
+  | App   (x1,x2), App (y1,y2)     -> Constraints.union (downArr x1 y1) (downArr x2 y2)
+  | Var x, Var y when (x = y)      -> Constraints.empty
+  | Id  x , Id y when (x = y)      -> Constraints.empty
+  | Sort (Prop), Sort (Prop)       -> Constraints.empty
+  | _                              -> raise ConvFail
+
+
 (******************************************************************************
  * val typeof : context -> term -> (term * LConstraints)
  *
@@ -27,8 +68,8 @@ exception Error
  ******************************************************************************)
 let rec typeof c = function
   | Sort a                                  -> typeofSorts c a
-  | Id  n       when (C.inLocal  c n)       -> cum (empty ()) (C.getLocal  c n) 
-  | Var x       when (C.inGlobal c x)       -> cum (empty ()) (C.getGlobal c x) 
+  | Id  n       when (C.inLocal  c n)       -> cum empty (C.getLocal  c n) 
+  | Var x       when (C.inGlobal c x)       -> cum empty (C.getGlobal c x) 
   | App (m,n)   when (test pAppRule c m n)  -> cAppRule c m n
   | Pi  (a,b)   when (test pGenRule c a b)  -> cGenRule c a b
   | Lam (a,m)   when (test pAbsRule c a m)  -> cAbsRule c a m

@@ -17,4 +17,7 @@ type global =
   | Gshow    of astTerm
   | Gwhnf    of astTerm
   | Gcheck   of astTerm * astTerm
-  | Gquit
+  | Gquit 
+
+val pp_astTerm : Format.formatter -> astTerm -> unit
+

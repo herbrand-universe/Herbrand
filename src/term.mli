@@ -3,7 +3,6 @@
  * El motivo principal es evitar inclusiones recursivas con otros archivos.
  * Cuando haya mas cosas, term.ml deberia desaparecer y ser solo term.mli
  * ***************************************************************************)
-open Set
 
 (* ****************************************************************************
  * Syntax 
@@ -36,7 +35,7 @@ type term =
   | Pi    of term * term
 
 
-
+val pp_term : Format.formatter -> term -> unit
 val toDeBruijn : Ast.astTerm -> term
 
 (** Weak Head Normal Form*)
@@ -47,29 +46,4 @@ val get_whnf_kind : term -> sort
 val get_whnf_pi : term -> term * term
 val dBsubs : int -> term -> term -> term
 
-(*
-type rel =
-  | LT
-  | LE
-  | EQ
-type constr =
-  | C of rel * universe * universe
-
-type level_assignment = (name * int) list
-
-
-module LVar = struct
-  type t = string 
-  let compare = String.compare
-end
-
-module LVars = Set.Make( LVar )
-
-module LConstraint = struct
-  type t = constr 
-  let compare _ _ = 1 
-end
-
-module LConstraints = Set.Make ( LConstraint )
-*)
 

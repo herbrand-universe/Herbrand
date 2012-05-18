@@ -5,7 +5,6 @@
  * ***************************************************************************)
 open Ast
 open Format
-open Set
 (* ****************************************************************************
  * Syntax 
  *
@@ -112,3 +111,20 @@ let get_whnf_kind t = match whnf t with
 let get_whnf_pi t = match whnf t with
   | Pi (a,b) -> a,b
 
+let pp_sort fmt = function
+  | Prop -> fprintf fmt "Prop"
+  | Type (Uint n) -> fprintf fmt "Type <%d>" n
+  | Type (Uvar x) -> fprintf fmt "Type <%s>" x
+
+
+
+let rec pp_term fmt = function
+  | Var name        -> fprintf fmt "%s" name
+  | Sort s          -> fprintf fmt "%a" pp_sort s
+  | Id n            -> fprintf fmt "%d" n
+  | Lam  (t1, t2) -> 
+    fprintf fmt "L (%a) , (%a)" pp_term t1 pp_term t2
+  | App  (t1 , t2) -> 
+    fprintf fmt "[(%a) (%a)]" pp_term t1 pp_term t2
+  | Pi (t1,t2) -> 
+    fprintf fmt "P (%a) , (%a)" pp_term t1 pp_term t2
