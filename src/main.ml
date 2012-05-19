@@ -5,23 +5,31 @@ open Constraints
 open Typechecker
 open Tests (* Al incluirlo se van a ejecutar los tests *)
 
+module C = Context
 
 type state = {
-  mutable gamma : Context.context;
+  mutable gamma : C.context;
 }
 
 let state = {
-  gamma = Context.empty ();
+  gamma = C.empty ();
 }
 
 
 
 let pp_res fmt (a,b) = pp_term fmt a; pp_lconstr fmt b
 
+let process_def (n, def) =
+  let t = toDeBruijn def in
+  let ty,constr = typeof state.gamma t in
+  state.gamma <- (C.addGlobal state.gamma n t ty constr)
+  
+
 (* Aca empieza todo a fines practicos *)
 let main = function
 (* | Gassume (n,t)     -> state.gamma <- (Context.addGlobal state.gamma n (toDeBruijn t))*)
- | Gdef (name, def)  -> ()
+ | Gdef  (n,t) when not (C.inGlobal state.gamma n)    -> process_def (n,t) 
+ | Gdef  (n,_)       -> Format.printf "The name [%s] is alredy in use@\n" n
  | Gshow t           -> Format.printf "%a@\n" pp_term (toDeBruijn t)
  | Ginfer t          -> Format.printf "%a@\n" pp_res (typeof state.gamma (toDeBruijn t))
  | Gcheck (t1,t2)    -> Format.printf "%a@\n" pp_lconstr (downArr (toDeBruijn t1) (toDeBruijn t2))
