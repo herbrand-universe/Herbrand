@@ -29,7 +29,7 @@
       * Subs: ¿Necesito delta expandir? (creo que no)
       * whnf: ¿Delta expandir?
       * conv (downArr) : Delta expandir, ¿excepto (Var x) 'downArr' (Var y) cuando x = y?
-      * typeof (Var x) : Como esta ahora esta mal, pero como no la usamos no importo. 
+      * **(Done?)** typeof (Var x) : Como esta ahora esta mal, pero como no la usamos no importo. 
                 
 
 **To Do** 
