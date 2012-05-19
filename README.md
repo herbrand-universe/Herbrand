@@ -1,9 +1,9 @@
 **Comandos**
 ***
-   * **Show <<name>>** debería mostrar la definición de un tipo.
+   * **Show name** debería mostrar la definición de un tipo.
    * **Show all** debería mostrar todas las definiciones en el contexto global.
-   * **Def <<name>> = <term>** debería definir una variable en el contexto global.
-   * **Proof <name> = <prop>** debería ser el comienzo de una prueba de <prop>.
+   * **Def name = term** debería definir una variable en el contexto global.
+   * **Proof name = prop** debería ser el comienzo de una prueba de <prop>.
    * **End** debería ser el final de una prueba.
 
    * **infer** dado un **astTerm** retorna el tipo y el conjunto de restricciones.
