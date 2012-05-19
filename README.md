@@ -16,10 +16,10 @@
       * **(Done)** val getDef : context -> name -> term
       
    * ¿Comó definir?. Def x := t
-      * x no esta en dom(contexto)
-      * well-typed (t) en el contexto <- (Con esto también sabemos que FV(t) c dom(Contexto) ('c' incluido)
+      * **(Done)** x no esta en dom(contexto)
       * ¿Es necesario delta-expandir todo 't' hasta que FV(t) = {}. (Ver paper Harper)
-      * Contexto <- (name, term, type, constr) :: Contexto
+      * **(Done)** well-typed (t) en el contexto <- (Con esto también sabemos que FV(t) c dom(Contexto) ('c' incluido)
+      * **(Done)** Contexto <- (name, term, type, constr) :: Contexto
       
    * Modificaciones de las reglas (lo estoy pensando :P)
       * Subs: ¿Necesito delta expandir? (creo que no)
