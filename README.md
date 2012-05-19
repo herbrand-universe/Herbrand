@@ -9,7 +9,7 @@
 **Agregar definiciones (delta)**
 ***
    * Contextos globales :
-      * Cambiar el tipo context.global = (name,term,type,constr) list
+      * **(Done)** Cambiar el tipo context.global = (name,term,type,constr) list
       * val dom : context -> name list
       * val addGlobal : context -> name -> term -> type -> constraints -> context
       * val getType : context -> name -> type * constraints
