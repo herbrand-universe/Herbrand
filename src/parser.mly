@@ -6,7 +6,7 @@
 /* Parser para Herbrand */
 %token <string> IDENT
 %token <int> NUM
-%token DEF SHOW PROOF END
+%token DEF SHOW PROOF END ALL
 %token EQ CHECK WITH WHNF ID INFER SHOW QUIT
 %token COLON DOT COMMA TSEP
 %token LAM PI PROP TYPE
@@ -28,6 +28,7 @@ global_elem:
 |  INFER term              { Ginfer $2 }
 |  CHECK term WITH term    { Gcheck ($2,$4) }
 |  WHNF term               { Gwhnf $2 }
+|  SHOW ALL                { Gshow_all }
 |  SHOW term               { Gshow $2 }
 |  QUIT                    { Gquit }
 ;

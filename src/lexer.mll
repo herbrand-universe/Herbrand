@@ -20,6 +20,7 @@ let global_keywords =
     "Show",    SHOW;
     "Proof",   PROOF;
     "End",     END;
+    "all",     ALL;
 
     (**)
     "check",   CHECK;

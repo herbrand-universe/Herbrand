@@ -17,6 +17,7 @@ type global =
   | Gend
   | Ginfer   of astTerm
   | Gshow    of astTerm
+  | Gshow_all
   | Gwhnf    of astTerm
   | Gcheck   of astTerm * astTerm
   | Gquit 
