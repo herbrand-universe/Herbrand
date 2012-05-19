@@ -13,6 +13,9 @@
    
 **Agregar definiciones (delta)**
 ***
+   * **Puede ser que este todo listo y anda**
+      * Desconozco como probar, mis pocos ejemplos funcaron ...
+
    * Contextos globales :
       * **(Done)** Cambiar el tipo context.global = (name,term,type,constr) list
       * **(Done)** val addGlobal : context -> name -> term -> type -> constraints -> context
@@ -27,8 +30,10 @@
       
    * Modificaciones de las reglas (lo estoy pensando :P)
       * Subs: ¿Necesito delta expandir? (creo que no)
-      * whnf: ¿Delta expandir?
+         * G: No veo por qué lo debería hacer.
+      * **(Done)** whnf: ¿Delta expandir?
       * conv (downArr) : Delta expandir, ¿excepto (Var x) 'downArr' (Var y) cuando x = y?
+         * G: Creo que jamas va a quedar (Var x) dentro de downArr, porque esta función primero aplica whnf a ambos terminos.
       * **(Done?)** typeof (Var x) : Como esta ahora esta mal, pero como no la usamos no importo. 
                 
 
