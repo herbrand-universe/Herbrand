@@ -6,7 +6,8 @@
 /* Parser para Herbrand */
 %token <string> IDENT
 %token <int> NUM
-%token ASSUME EQ CHECK WITH WHNF ID INFER SHOW QUIT
+%token DEF SHOW PROOF END
+%token EQ CHECK WITH WHNF ID INFER SHOW QUIT
 %token COLON DOT COMMA TSEP
 %token LAM PI PROP TYPE
 %token LPAREN RPAREN
@@ -21,7 +22,9 @@ global:
 ;
 
 global_elem:
-|  ASSUME ident WITH term  { Gassume ($2,$4) }
+|  DEF ident EQ term       { Gdef ($2,$4) }
+|  PROOF ident EQ term     { Gproof ($2,$4) }
+|  END                     { Gend }
 |  INFER term              { Ginfer $2 }
 |  CHECK term WITH term    { Gcheck ($2,$4) }
 |  WHNF term               { Gwhnf $2 }

@@ -15,12 +15,17 @@ let tactics_keywords =
 
 let global_keywords = 
   [
+    (**)
+    "Def",     DEF; 
+    "Show",    SHOW;
+    "Proof",   PROOF;
+    "End",     END;
+
+    (**)
     "check",   CHECK;
     "with",    WITH;
     "whnf",    WHNF;
-    "assume",  ASSUME;
     "show" ,   SHOW;
-    "eq_term", EQ;
     "infer",   INFER;
     "quit" ,   QUIT;
   ]
@@ -52,10 +57,11 @@ rule token = parse
   | ident as id               {
         try Hashtbl.find keywords id with Not_found -> IDENT id }
 
-| ':'                { COLON }
+  | ':'                { COLON }
   | ','                { COMMA }
   | '/'                { TSEP }
 
+  | '='                { EQ }
   | '('                { LPAREN }
   | ')'                { RPAREN }
 

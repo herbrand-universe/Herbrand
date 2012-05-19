@@ -12,7 +12,9 @@ type astTerm =
   | APi    of name * astTerm * astTerm
 
 type global = 
-  | Gassume  of (name * astTerm)
+  | Gdef     of name * astTerm
+  | Gproof   of name * astTerm
+  | Gend
   | Ginfer   of astTerm
   | Gshow    of astTerm
   | Gwhnf    of astTerm
