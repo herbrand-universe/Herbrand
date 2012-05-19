@@ -68,17 +68,6 @@ let rec dBsubs n t = function
   | Pi  (ty,t1)        -> Pi  (dBsubs n t ty, dBsubs (n+1) t t1)
   | Sort s             -> Sort s
 
-(* ****************************************************************************
- * val whnf : term -> term
- *
- * Nota: \x -> x = \ 1  (Los indices empiezan en 1)
- * ***************************************************************************)
-let rec whnf = function
-  | App (t1, t2) -> 
-    (match whnf t1 with
-      | Lam (_,t)   -> whnf (dBsubs 1 t2 t) 
-      | t           -> App (t,t2))
-  | t            -> t
 
 (* ****************************************************************************
  * val toDeBruijn : astTerm -> term
@@ -100,16 +89,6 @@ let toDeBruijn =
     | APi (n, at, at') -> Pi (toDeBruijnCtx ctx at, toDeBruijnCtx (n::ctx) at')
     | AApp (at, at') -> App (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
   in toDeBruijnCtx []
-
-let whnf_is_kind t = match whnf t with
-  | Sort t1        -> true
-  | _              -> false
-
-let get_whnf_kind t = match whnf t with
-  | Sort t1         -> t1
-
-let get_whnf_pi t = match whnf t with
-  | Pi (a,b) -> a,b
 
 let pp_sort fmt = function
   | Prop -> fprintf fmt "Prop"

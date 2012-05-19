@@ -12,4 +12,8 @@ val getDef : context -> Term.name -> Term.term
 val getType : context -> Term.name -> Term.term * Constraints.LConstraints.t
 val getGlobal : context -> Term.name -> Term.term * Term.term * Constraints.LConstraints.t
 
+val whnf : context -> Term.term -> Term.term
+val whnf_is_kind : context -> Term.term -> bool
+val get_whnf_kind : context -> Term.term -> Term.sort
+val get_whnf_pi : context -> Term.term -> Term.term * Term.term
 

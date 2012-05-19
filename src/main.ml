@@ -32,7 +32,7 @@ let main = function
  | Gdef  (n,_)       -> Format.printf "The name [%s] is alredy in use@\n" n
  | Gshow t           -> Format.printf "%a@\n" pp_term (toDeBruijn t)
  | Ginfer t          -> Format.printf "%a@\n" pp_res (typeof state.gamma (toDeBruijn t))
- | Gcheck (t1,t2)    -> Format.printf "%a@\n" pp_lconstr (downArr (toDeBruijn t1) (toDeBruijn t2))
+ | Gcheck (t1,t2)    -> Format.printf "%a@\n" pp_lconstr (downArr state.gamma (toDeBruijn t1) (toDeBruijn t2))
  | Gquit             -> raise Lexer.Eof
  | _                 -> () 
 

@@ -19,11 +19,11 @@ let typeofSorts c = function
 exception Error
 
 (* ****************************************************************************
- * val cum : LConstraints -> term -> term * LConstraints
+ * val cum : context -> LConstraints -> term -> term * LConstraints
  *
  *
  * ***************************************************************************)
-let cum c x = match whnf x with
+let cum g c x = match C.whnf g x with
   | (Sort (Type l)) -> 
     let a = Constraints.freshLV () in Sort (Type a), Constraints.union (l <=. a) c
   | _ -> x, c
@@ -43,16 +43,16 @@ let upArr c = function
 
 
 (* ****************************************************************************
- * val downArr : term -> term -> LConstraints
+ * val downArr : context -> term -> term -> LConstraints
  *
  * Return the weakest constraint set or raise an exception (ConvFail)
  * ***************************************************************************)
 exception ConvFail 
-let rec downArr t1 t2 = match whnf t1,whnf t2 with
+let rec downArr c t1 t2 = match C.whnf c t1,C.whnf c t2 with
   | Sort (Type a), Sort (Type b)   -> a =. b
-  | Pi    (x1,x2), Pi (y1,y2)      -> Constraints.union (downArr x1 y1) (downArr x2 y2)
-  | Lam   (x1,x2), Lam (y1,y2)     -> Constraints.union (downArr x1 y1) (downArr x2 y2)
-  | App   (x1,x2), App (y1,y2)     -> Constraints.union (downArr x1 y1) (downArr x2 y2)
+  | Pi    (x1,x2), Pi (y1,y2)      -> Constraints.union (downArr c x1 y1) (downArr c x2 y2)
+  | Lam   (x1,x2), Lam (y1,y2)     -> Constraints.union (downArr c x1 y1) (downArr c x2 y2)
+  | App   (x1,x2), App (y1,y2)     -> Constraints.union (downArr c x1 y1) (downArr c x2 y2)
   | Var x, Var y when (x = y)      -> Constraints.empty
   | Id  x , Id y when (x = y)      -> Constraints.empty
   | Sort (Prop), Sort (Prop)       -> Constraints.empty
@@ -68,7 +68,7 @@ let rec downArr t1 t2 = match whnf t1,whnf t2 with
  ******************************************************************************)
 let rec typeof c = function
   | Sort a                                  -> typeofSorts c a
-  | Id  n       when (C.inLocal  c n)       -> cum empty (C.getLocal  c n) 
+  | Id  n       when (C.inLocal  c n)       -> cum c empty (C.getLocal  c n) 
   | Var x       when (C.inGlobal c x)       -> C.getType c x
   | App (m,n)   when (test pAppRule c m n)  -> cAppRule c m n
   | Pi  (a,b)   when (test pGenRule c a b)  -> cGenRule c a b
@@ -87,7 +87,7 @@ and test f a b c = try f a b c with _ -> false
  *      that A has a 'kind' as type. 
  ******************************************************************************)
 and validType c t = 
-  let x, _ = typeof c t in Term.whnf_is_kind x
+  let x, _ = typeof c t in C.whnf_is_kind c x
 
 (******************************************************************************
  * val validTypeS : context -> term -> bool                      (or EXCEPTION!)
@@ -101,7 +101,7 @@ and validType c t =
  ******************************************************************************)
 and validTypeS c a = 
   let x, constr = typeof c a 
-  in (Term.whnf_is_kind x) && (S.satisfiable constr)
+  in (C.whnf_is_kind c x) && (S.satisfiable constr)
 
 
 (******************************************************************************
@@ -117,8 +117,8 @@ and pGenRule c t1 t2 = validTypeS c t1 && validType (C.addLocal c t1) t2
 and cGenRule c a b =
     let x,d = typeof c a in
     let y,e = typeof (C.addLocal c a) b in
-    let k1  = get_whnf_kind x in
-    let k2  = get_whnf_kind y in
+    let k1  = C.get_whnf_kind c x in
+    let k2  = C.get_whnf_kind (C.addLocal c a) y in
     let g,h = upArr (union d e) (k1,k2) in
     Sort g,h
 
@@ -153,14 +153,14 @@ and hasType g t = try ignore(typeof g t); true with _ -> false
 and pAppRule g m n = 
   let x, c = typeof g m in
   let y, d = typeof g n in
-  match whnf x with
-    | Pi (x1,_)  -> ignore (downArr x1 y); true
+  match C.whnf g x with
+    | Pi (x1,_)  -> ignore (downArr g x1 y); true
     | _          -> false
 
 and cAppRule g m n = 
   let x , c  = typeof g m in
-  let x1, x2 = Term.get_whnf_pi x in
+  let x1, x2 = C.get_whnf_pi g x in
   let y , d = typeof g n in
-  let e = downArr x1 y in
-    cum (union c (union d e)) (dBsubs 1 n x2)
+  let e = downArr g x1 y in
+    cum g  (union c (union d e)) (dBsubs 1 n x2)
 
