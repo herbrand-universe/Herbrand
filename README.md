@@ -11,9 +11,9 @@
    * Contextos globales :
       * **(Done)** Cambiar el tipo context.global = (name,term,type,constr) list
       * val dom : context -> name list
-      * val addGlobal : context -> name -> term -> type -> constraints -> context
-      * val getType : context -> name -> type * constraints
-      * val getDef : context -> name -> term
+      * **(Done)** val addGlobal : context -> name -> term -> type -> constraints -> context
+      * **(Done)** val getType : context -> name -> type * constraints
+      * **(Done)** val getDef : context -> name -> term
       
    * ¿Comó definir?. Def x := t
       * x no esta en dom(contexto)
