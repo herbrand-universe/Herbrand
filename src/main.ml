@@ -20,7 +20,7 @@ let pp_res fmt (a,b) = pp_term fmt a; pp_lconstr fmt b
 
 (* Aca empieza todo a fines practicos *)
 let main = function
- | Gassume (n,t)     -> state.gamma <- (Context.addGlobal state.gamma n (toDeBruijn t))
+(* | Gassume (n,t)     -> state.gamma <- (Context.addGlobal state.gamma n (toDeBruijn t))*)
  | Gshow t           -> Format.printf "%a@\n" pp_term (toDeBruijn t)
  | Ginfer t          -> Format.printf "%a@\n" pp_res (typeof state.gamma (toDeBruijn t))
  | Gcheck (t1,t2)    -> Format.printf "%a@\n" pp_lconstr (downArr (toDeBruijn t1) (toDeBruijn t2))
