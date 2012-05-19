@@ -69,7 +69,7 @@ let rec downArr t1 t2 = match whnf t1,whnf t2 with
 let rec typeof c = function
   | Sort a                                  -> typeofSorts c a
   | Id  n       when (C.inLocal  c n)       -> cum empty (C.getLocal  c n) 
-  | Var x       when (C.inGlobal c x)       -> cum empty (C.getGlobal c x) 
+  | Var x       when (C.inGlobal c x)       -> C.getType c x
   | App (m,n)   when (test pAppRule c m n)  -> cAppRule c m n
   | Pi  (a,b)   when (test pGenRule c a b)  -> cGenRule c a b
   | Lam (a,m)   when (test pAbsRule c a m)  -> cAbsRule c a m

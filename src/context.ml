@@ -15,7 +15,9 @@ let inLocal c i = i <= (List.length c.local)
 
 let inGlobal c n = List.mem_assoc n c.global
 
+let getType c n =   let _,ty,constr =  (List.assoc n c.global) in  ty, constr
+let getDef  c n =   let t,_ ,_ =  (List.assoc n c.global) in  t
 
-let getGlobal c n = let t,_,_ = (List.assoc n c.global) in t
+let getGlobal c n = List.assoc n c.global
 
 let getLocal  c i = List.nth c.local (i-1)
