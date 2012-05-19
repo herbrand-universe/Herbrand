@@ -1,6 +1,11 @@
 **Comandos**
 ***
-   * **assume** agrega (x:A) al contexto global.
+   * **Show <name>** debería mostrar la definición de un tipo.
+   * **Show all** debería mostrar todas las definiciones en el contexto global.
+   * **Def <name> = <term>** debería definir una variable en el contexto global.
+   * **Proof <name> = <prop>** debería ser el comienzo de una prueba de <prop>.
+   * **End** debería ser el final de una prueba.
+
    * **infer** dado un **astTerm** retorna el tipo y el conjunto de restricciones.
    * **check** dado dos **astTerm** chequea si son equivalentes y bajo que restricciones.
    * **show** dado un **astTerm** muestra su **term** equivalente.
@@ -10,7 +15,6 @@
 ***
    * Contextos globales :
       * **(Done)** Cambiar el tipo context.global = (name,term,type,constr) list
-      * val dom : context -> name list
       * **(Done)** val addGlobal : context -> name -> term -> type -> constraints -> context
       * **(Done)** val getType : context -> name -> type * constraints
       * **(Done)** val getDef : context -> name -> term
