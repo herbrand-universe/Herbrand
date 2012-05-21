@@ -10,6 +10,7 @@
 %token EQ CHECK WITH WHNF ID INFER SHOW QUIT
 %token COLON DOT COMMA TSEP
 %token LAM PI PROP TYPE
+%token AND OR IMP NOT EXISTS FORALL
 %token LPAREN RPAREN
 %token LT GT
 %token EOL
@@ -23,7 +24,7 @@ global:
 
 global_elem:
 |  DEF ident EQ term       { Gdef ($2,$4) }
-|  PROOF ident EQ term     { Gproof ($2,$4) }
+|  PROOF ident EQ prop     { Gproof ($2,$4) }
 |  END                     { Gend }
 |  INFER term              { Ginfer $2 }
 |  CHECK term WITH term    { Gcheck ($2,$4) }
@@ -55,3 +56,14 @@ number:
 ident:
   IDENT            { $1 }
 ;
+
+prop:
+| ident                                { Gvar $1 }
+| LPAREN prop RPAREN                   { $2 }
+| NOT prop                             { Gnot $2 }
+| prop AND prop                        { Gand ($1,$3) }
+| prop OR  prop                        { Gor  ($1,$3) }
+| prop IMP prop                        { Gimp ($1,$3) }
+| FORALL ident COLON prop COMMA prop   { Gforall ($2,$4,$6) }
+| EXISTS ident COLON prop COMMA prop   { Gexists ($2,$4,$6) }
+

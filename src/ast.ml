@@ -13,9 +13,19 @@ type astTerm =
   | AApp   of astTerm * astTerm
   | APi    of name * astTerm * astTerm
 
+
+type prop =
+  | Gvar of name
+  | Gnot of prop
+  | Gand of prop * prop
+  | Gor  of prop * prop
+  | Gimp of prop * prop
+  | Gforall of name * prop * prop
+  | Gexists of name * prop * prop
+
 type global = 
   | Gdef     of name * astTerm
-  | Gproof   of name * astTerm
+  | Gproof   of name * prop
   | Gend
   | Ginfer   of astTerm
   | Gshow    of astTerm

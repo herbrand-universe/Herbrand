@@ -22,6 +22,10 @@ let global_keywords =
     "End",     END;
     "all",     ALL;
 
+    (* Logic *)
+    "forall",  FORALL;
+    "exists",  EXISTS;
+
     (**)
     "check",   CHECK;
     "with",    WITH;
@@ -61,6 +65,13 @@ rule token = parse
   | ':'                { COLON }
   | ','                { COMMA }
   | '/'                { TSEP }
+
+
+  (* Logic *)
+  | '~'                { NOT }
+  | "=>"               { IMP }
+  | "/\\"              { AND }
+  | "\\/"              { OR  }
 
   | '='                { EQ }
   | '('                { LPAREN }
