@@ -35,6 +35,10 @@
       * conv (downArr) : Delta expandir, ¿excepto (Var x) 'downArr' (Var y) cuando x = y?
          * G: Creo que jamas va a quedar (Var x) dentro de downArr, porque esta función primero aplica whnf a ambos terminos.
       * **(Done?)** typeof (Var x) : Como esta ahora esta mal, pero como no la usamos no importo. 
+
+**Agregar algo de lógica**
+***
+  * E: ¿Te parece que empiece a agregar algo de lógica?
                 
 
 **To Do** 
