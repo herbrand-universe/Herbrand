@@ -39,6 +39,7 @@
 **Agregar algo de lógica**
 ***
   * E: ¿Te parece que empiece a agregar algo de lógica?
+  * G: Hace lo que te de la gana. 
                 
 
 **To Do** 
