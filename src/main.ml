@@ -1,5 +1,6 @@
 open Ast
 open Term
+open Logic
 open Format
 open Constraints
 open Typechecker
@@ -30,6 +31,7 @@ let main = function
 (* | Gassume (n,t)     -> state.gamma <- (Context.addGlobal state.gamma n (toDeBruijn t))*)
  | Gdef  (n,t) when not (C.inGlobal state.gamma n)    -> process_def (n,t) 
  | Gdef  (n,_)       -> Format.printf "The name [%s] is alredy in use@\n" n
+ | Gproof (n,p)      -> Format.printf "%a@\n" pp_term (prop2term p)
  | Gshow t           -> Format.printf "%a@\n" pp_term (toDeBruijn t)
  | Ginfer t          -> Format.printf "%a@\n" pp_res (typeof state.gamma (toDeBruijn t))
  | Gcheck (t1,t2)    -> Format.printf "%a@\n" pp_lconstr (downArr state.gamma (toDeBruijn t1) (toDeBruijn t2))
