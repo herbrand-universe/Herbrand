@@ -1,4 +1,5 @@
 open Format
+open Term
 
 type name = string
 
@@ -15,13 +16,15 @@ type astTerm =
 
 
 type prop =
+  | Gtrue
+  | Gfalse
   | Gvar of name
   | Gnot of prop
   | Gand of prop * prop
   | Gor  of prop * prop
   | Gimp of prop * prop
-  | Gforall of name * prop * prop
-  | Gexists of name * prop * prop
+  | Gforall of name * astTerm * prop
+  | Gexists of name * astTerm * prop
 
 type global = 
   | Gdef     of name * astTerm

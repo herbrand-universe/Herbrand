@@ -1,22 +1,15 @@
 open Ast
+open Term
 
-type name = string
+let rec prop2astTerm = function 
+  | Gtrue -> prop2astTerm (Gforall (("X"), (ASort AProp), (Gimp ((Gvar "X"), (Gvar "X")))))
+  | Gfalse -> prop2astTerm (Gforall (("X"), (ASort AProp), (Gvar "X")))
+  | Gvar n -> AVar n
+  | Gnot p -> prop2astTerm (Gimp (p, Gfalse))
+  | Gand (p, q) -> prop2astTerm (Gforall (("X"), (ASort AProp), (Gimp ((Gimp (p, (Gimp (q, (Gvar "X"))))), (Gvar "X")))))
+  | Gor  (p, q) -> prop2astTerm (Gforall (("X"), (ASort AProp), (Gimp ((Gimp ((Gimp (p, (Gvar "X"))), (Gimp (q, (Gvar "X"))))), (Gvar "X")))))
+  | Gimp (p, q) -> prop2astTerm (Gforall (("0$"), (prop2astTerm p), q))
+  | Gforall (n, t, p) -> APi (n, t, (prop2astTerm p))
+  | Gexists (n, t, p) -> prop2astTerm (Gforall (("X"), (ASort AProp), (Gimp ((Gforall (n, t, (Gimp (p, (Gvar "X"))))), (Gvar "X")))))
 
-type prop =
-  | Var of name
-  | Not of prop
-  | And of prop * prop
-  | Or  of prop * prop
-  | Imp of prop * prop
-  | ForAll of name * prop * prop
-  | Exists of name * prop * prop
-
-let rec ast2prop = function 
-  | Gvar n -> Var n
-  | Gnot p -> Not (ast2prop p)
-  | Gand (p, q) -> And ((ast2prop p), (ast2prop q))
-  | Gor  (p, q) -> Or ((ast2prop p), (ast2prop q))
-  | Gimp (p, q) -> Imp ((ast2prop p), (ast2prop q))
-  | Gforall (n, p, q) -> ForAll (n, ast2prop p, ast2prop q)
-  | Gexists (n, p, q) -> Exists (n, ast2prop p, ast2prop q)
-
+let prop2term f = toDeBruijn (prop2astTerm f)

@@ -25,6 +25,8 @@ let global_keywords =
     (* Logic *)
     "forall",  FORALL;
     "exists",  EXISTS;
+    "true",    TRUE;
+    "false",   FALSE;
 
     (**)
     "check",   CHECK;
