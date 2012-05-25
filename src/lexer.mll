@@ -67,7 +67,7 @@ rule token = parse
   | ':'                { COLON }
   | ','                { COMMA }
   | '/'                { TSEP }
-
+  | "->"               { ARROW }
 
   (* Logic *)
   | '~'                { NOT }

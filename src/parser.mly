@@ -8,7 +8,7 @@
 %token <int> NUM
 %token DEF SHOW PROOF END ALL
 %token EQ CHECK WITH WHNF ID INFER SHOW QUIT
-%token COLON DOT COMMA TSEP
+%token COLON DOT COMMA TSEP ARROW
 %token LAM PI PROP TYPE
 %token AND OR IMP NOT EXISTS FORALL TRUE FALSE
 %token LPAREN RPAREN
@@ -45,6 +45,7 @@ term:
 | ident                            { AVar $1 }
 | sorts                            { ASort $1 }
 | PI ident COLON term COMMA term   { APi ($2,$4,$6) }
+| term ARROW term                  { APi ("1$",$1,$3)}
 | LAM ident COLON term COMMA term  { ALam ($2,$4,$6) }
 | term term                        { AApp ($1,$2) }
 ;
