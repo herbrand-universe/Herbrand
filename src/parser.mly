@@ -37,7 +37,7 @@ global_elem:
 
 sorts: 
 | PROP             { AProp }
-| TYPE TSEP number { AType $3 } 
+| TYPE TSEP number { AType (AUint $3) } 
 ;
 
 term:

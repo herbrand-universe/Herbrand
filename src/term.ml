@@ -84,7 +84,7 @@ let toDeBruijn =
       | None -> Var n
       | Some i -> Id i)
     | ASort AProp -> Sort Prop
-    | ASort (AType n) -> Sort (Type (Uint n))
+    | ASort (AType (AUint n)) -> Sort (Type (Uint n))
     | ALam (n, at, at') -> Lam (toDeBruijnCtx ctx at, toDeBruijnCtx (n::ctx) at')
     | APi (n, at, at') -> Pi (toDeBruijnCtx ctx at, toDeBruijnCtx (n::ctx) at')
     | AApp (at, at') -> App (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
@@ -95,7 +95,18 @@ let pp_sort fmt = function
   | Type (Uint n) -> fprintf fmt "Type <%d>" n
   | Type (Uvar x) -> fprintf fmt "Type <%s>" x
 
+let lastVar = ref 0
+let freshVar () = incr lastVar; ("y" ^ string_of_int !lastVar)
 
+let rec fromDeBruijn = function
+  | Var name        -> AVar name
+  | App (s,t)       -> AApp (fromDeBruijn s,fromDeBruijn t)
+  | Sort Prop       -> ASort AProp
+  | Id n            -> AVar (string_of_int n)
+  | Sort (Type (Uint a))   -> ASort (AType (AUint a))
+  | Sort (Type (Uvar a))   -> ASort (AType (AUvar a))
+  | Pi  (s,t)       -> let n = freshVar () in APi (n,fromDeBruijn s, fromDeBruijn (dBsubs 1 (Var n) t))
+  | Lam (s,t)       -> let n = freshVar () in ALam (n,fromDeBruijn s, fromDeBruijn (dBsubs 1 (Var n) t))
 
 let rec pp_term fmt = function
   | Var name        -> fprintf fmt "%s" name

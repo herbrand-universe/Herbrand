@@ -2,10 +2,13 @@ open Format
 open Term
 
 type name = string
+type universe =
+  | AUint of int
+  | AUvar of string
 
 type sort = 
   | AProp
-  | AType of int 
+  | AType of universe
 
 type astTerm =
   | AVar   of name
@@ -39,7 +42,8 @@ type global =
 
 let pp_sort fmt = function
   | AProp -> fprintf fmt "Prop"
-  | AType n -> fprintf fmt "Type <%d>" n
+  | AType (AUint n) -> fprintf fmt "Type <%d>" n
+  | AType (AUvar n) -> fprintf fmt "Type <%s>" n
 
 
 

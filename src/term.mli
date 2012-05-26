@@ -37,6 +37,7 @@ type term =
 
 val pp_term : Format.formatter -> term -> unit
 val toDeBruijn : Ast.astTerm -> term
+val fromDeBruijn : term -> Ast.astTerm 
 
 val dBsubs : int -> term -> term -> term
 

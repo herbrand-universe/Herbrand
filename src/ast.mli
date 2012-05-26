@@ -1,8 +1,12 @@
 type name = string
 
+type universe =
+  | AUint of int
+  | AUvar of string
+
 type sort = 
   | AProp
-  | AType of int 
+  | AType of universe
 
 type astTerm =
   | AVar   of name
