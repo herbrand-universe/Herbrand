@@ -45,7 +45,13 @@ let pp_sort fmt = function
   | AType (AUint n) -> fprintf fmt "Type <%d>" n
   | AType (AUvar n) -> fprintf fmt "Type <%s>" n
 
-
+let rec freeVar n = function
+  | AVar name when (n = name)      -> true
+  | ASort s                        -> false
+  | AApp (s,t)                     -> (freeVar n s) && (freeVar n t)
+  | ALam (n1,s,t) when (n <> n1)   -> (freeVar n s) && (freeVar n t)
+  | APi  (n1,s,t) when (n <> n1)   -> (freeVar n s) && (freeVar n t)
+  | _                              -> false
 
 let rec pp_astTerm fmt = function
   | AVar name        -> fprintf fmt "%s" name
@@ -54,6 +60,8 @@ let rec pp_astTerm fmt = function
     fprintf fmt "L %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
   | AApp  (t1 , t2) -> 
     fprintf fmt "[(%a) (%a)]" pp_astTerm t1 pp_astTerm t2
+  | APi (s,t1,t2) when not (freeVar s t2) -> 
+    fprintf fmt "(%a) -> (%a)" pp_astTerm t1 pp_astTerm t2
   | APi (s,t1,t2) -> 
     fprintf fmt "P %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
 
