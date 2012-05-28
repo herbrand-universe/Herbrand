@@ -48,9 +48,9 @@ let pp_sort fmt = function
 let rec freeVar n = function
   | AVar name when (n = name)      -> true
   | ASort s                        -> false
-  | AApp (s,t)                     -> (freeVar n s) && (freeVar n t)
-  | ALam (n1,s,t) when (n <> n1)   -> (freeVar n s) && (freeVar n t)
-  | APi  (n1,s,t) when (n <> n1)   -> (freeVar n s) && (freeVar n t)
+  | AApp (s,t)                     -> (freeVar n s) || (freeVar n t)
+  | ALam (n1,s,t) when (n <> n1)   -> (freeVar n s) || (freeVar n t)
+  | APi  (n1,s,t) when (n <> n1)   -> (freeVar n s) || (freeVar n t)
   | _                              -> false
 
 let rec pp_astTerm fmt = function
