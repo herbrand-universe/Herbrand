@@ -1,3 +1,7 @@
-val typeof : Context.context -> Term.term -> Term.term * Constraints.LConstraints.t
-val downArr : Context.context -> Term.term -> Term.term -> Constraints.LConstraints.t
 
+val typeof : Context.context -> Term.term -> Term.term 
+
+(*
+val typeof : Context.context -> Term.term -> Term.term 
+val downArr : Context.context -> Term.term -> Term.term 
+*)

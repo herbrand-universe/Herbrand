@@ -16,16 +16,11 @@ open Format
  *
  * ***************************************************************************)
 
-type lvar = string
 type name = string
-
-type universe =
-  | Uint of int
-  | Uvar of lvar
 
 type sort = 
   | Prop
-  | Type of universe
+  | Type of int 
 
 type term =
   | Id    of int              (* Indices de deBruijn *)
@@ -34,6 +29,10 @@ type term =
   | Lam   of term * term
   | App   of term * term
   | Pi    of term * term
+  | Sigma of term * term
+  | Pair  of term * term * term
+  | L     of term
+  | R     of term
 
 
 
@@ -47,9 +46,13 @@ type term =
  * ***************************************************************************)
 let rec subs v t = function
   | Var x          when (x = v)  -> t
-  | Lam (t1,t2)   -> Lam (subs v t t1, subs v t t2)
-  | Pi  (t1,t2)   -> Pi  (subs v t t1, subs v t t2)
-  | App (t1,t2)   -> App (subs v t t1, subs v t t2)
+  | Lam   (t1,t2)   -> Lam (subs v t t1, subs v t t2)
+  | Pi    (t1,t2)   -> Pi  (subs v t t1, subs v t t2)
+  | Sigma (t1,t2)   -> Sigma  (subs v t t1, subs v t t2)
+  | App   (t1,t2)   -> App (subs v t t1, subs v t t2)
+  | Pair  (s,t1,t2) -> Pair (subs v t s,subs v t t1, subs v t t2)
+  | L s             -> L (subs v t s)
+  | R s             -> R (subs v t s)
   | term          -> term 
   
   
@@ -66,6 +69,10 @@ let rec dBsubs n t = function
   | Id k               -> Id k
   | Lam (ty,t1)        -> Lam (dBsubs n t ty, dBsubs (n+1) t t1) 
   | Pi  (ty,t1)        -> Pi  (dBsubs n t ty, dBsubs (n+1) t t1)
+  | Sigma  (ty,t1)     -> Sigma  (dBsubs n t ty, dBsubs (n+1) t t1)
+  | Pair (s,t1,t2)     -> Pair (dBsubs n t s, dBsubs n t t1, dBsubs n t t2)
+  | L s                -> L (dBsubs n t s)
+  | R s                -> R (dBsubs n t s)
   | Sort s             -> Sort s
 
 
@@ -84,16 +91,19 @@ let toDeBruijn =
       | None -> Var n
       | Some i -> Id i)
     | ASort AProp -> Sort Prop
-    | ASort (AType (AUint n)) -> Sort (Type (Uint n))
+    | ASort (AType n) -> Sort (Type n)
     | ALam (n, at, at') -> Lam (toDeBruijnCtx ctx at, toDeBruijnCtx (n::ctx) at')
     | APi (n, at, at') -> Pi (toDeBruijnCtx ctx at, toDeBruijnCtx (n::ctx) at')
+    | ASigma (n, at, at') -> Sigma (toDeBruijnCtx ctx at, toDeBruijnCtx (n::ctx) at')
     | AApp (at, at') -> App (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
+    | APair (n,at,at') -> Pair(toDeBruijnCtx ctx n, toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
+    | AL at            -> L (toDeBruijnCtx ctx at)
+    | AR at            -> R (toDeBruijnCtx ctx at)
   in toDeBruijnCtx []
 
 let pp_sort fmt = function
   | Prop -> fprintf fmt "Prop"
-  | Type (Uint n) -> fprintf fmt "Type <%d>" n
-  | Type (Uvar x) -> fprintf fmt "Type <%s>" x
+  | Type n -> fprintf fmt "Type <%d>" n
 
 let lastVar = ref 0
 let freshVar () = incr lastVar; ("y" ^ string_of_int !lastVar)
@@ -103,10 +113,13 @@ let rec fromDeBruijn = function
   | App (s,t)       -> AApp (fromDeBruijn s,fromDeBruijn t)
   | Sort Prop       -> ASort AProp
   | Id n            -> AVar (string_of_int n)
-  | Sort (Type (Uint a))   -> ASort (AType (AUint a))
-  | Sort (Type (Uvar a))   -> ASort (AType (AUvar a))
+  | Sort (Type a)   -> ASort (AType a)
   | Pi  (s,t)       -> let n = freshVar () in APi (n,fromDeBruijn s, fromDeBruijn (dBsubs 1 (Var n) t))
   | Lam (s,t)       -> let n = freshVar () in ALam (n,fromDeBruijn s, fromDeBruijn (dBsubs 1 (Var n) t))
+  | Sigma (s,t)     -> let n = freshVar () in ASigma (n,fromDeBruijn s, fromDeBruijn (dBsubs 1 (Var n) t))
+  | Pair (s,t1,t2)  -> APair (fromDeBruijn s, fromDeBruijn t1, fromDeBruijn t2)
+  | L t             -> AL (fromDeBruijn t)
+  | R t             -> AR (fromDeBruijn t)
 
 let rec pp_term fmt = function
   | Var name        -> fprintf fmt "%s" name

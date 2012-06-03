@@ -6,8 +6,10 @@ let keywords_symbols =
   [
     "L",      LAM;
     "P",      PI;
+    "S",       SIGMA;
     "Prop",    PROP;
     "Type",    TYPE;
+    "Pair",    PAIR;
   ]
 
 let tactics_keywords =

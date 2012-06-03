@@ -2,7 +2,6 @@ open Ast
 open Term
 open Logic
 open Format
-open Constraints
 open Typechecker
 open Tests (* Al incluirlo se van a ejecutar los tests *)
 
@@ -17,24 +16,23 @@ let state = {
 }
 
 
-
+(*
 let pp_res fmt (a,b) = pp_term fmt a; pp_lconstr fmt b
 
 let process_def (n, def) =
   let t = toDeBruijn def in
   let ty,constr = typeof state.gamma t in
   state.gamma <- (C.addGlobal state.gamma n t ty constr)
-  
+  *)
 
 (* Aca empieza todo a fines practicos *)
 let main = function
 (* | Gassume (n,t)     -> state.gamma <- (Context.addGlobal state.gamma n (toDeBruijn t))*)
- | Gdef  (n,t) when not (C.inGlobal state.gamma n)    -> process_def (n,t) 
- | Gdef  (n,_)       -> Format.printf "The name [%s] is alredy in use@\n" n
+(* | Gdef  (n,t) when not (C.inGlobal state.gamma n)    -> process_def (n,t) 
+ | Gdef  (n,_)       -> Format.printf "The name [%s] is alredy in use@\n" n*)
  | Gproof (n,p)      -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (prop2term p))
  | Gshow t           -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (toDeBruijn t))
- | Ginfer t          -> Format.printf "%a@\n" pp_res (typeof state.gamma (toDeBruijn t))
- | Gcheck (t1,t2)    -> Format.printf "%a@\n" pp_lconstr (downArr state.gamma (toDeBruijn t1) (toDeBruijn t2))
+ | Ginfer t          -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (typeof state.gamma (toDeBruijn t)))
  | Gquit             -> raise Lexer.Eof
  | _                 -> () 
 

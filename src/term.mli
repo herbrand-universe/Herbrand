@@ -15,16 +15,11 @@
  *
  * ***************************************************************************)
 
-type lvar = string
 type name = string
-
-type universe =
-  | Uint of int
-  | Uvar of lvar
 
 type sort = 
   | Prop
-  | Type of universe
+  | Type of int 
 
 type term =
   | Id    of int
@@ -33,6 +28,10 @@ type term =
   | Lam   of term * term
   | App   of term * term
   | Pi    of term * term
+  | Sigma of term * term
+  | Pair  of term * term * term
+  | L     of term
+  | R     of term
 
 
 val pp_term : Format.formatter -> term -> unit

@@ -1,12 +1,8 @@
 type name = string
 
-type universe =
-  | AUint of int
-  | AUvar of string
-
 type sort = 
   | AProp
-  | AType of universe
+  | AType of int
 
 type astTerm =
   | AVar   of name
@@ -14,6 +10,10 @@ type astTerm =
   | ALam   of name * astTerm * astTerm
   | AApp   of astTerm * astTerm
   | APi    of name * astTerm * astTerm
+  | ASigma of name * astTerm * astTerm
+  | APair  of astTerm * astTerm * astTerm
+  | AL     of astTerm
+  | AR     of astTerm
 
 
 type prop =
