@@ -45,6 +45,13 @@
   \DisplayProof
 \end{align}
 
+\begin{align}
+  \AxiomC{$\Gamma \vdash M_{1} : T_{1} \quad T_{1} \whnf \Pi x : A, B $}
+  \AxiomC{$\Gamma \vdash M_{2} : A' \quad A' \leq A $}
+  \tag{App-Rule1}
+  \BinaryInfC{$\Gamma \vdash M_{1} M_{2} \; : \; [M_{2}/x]B $}
+  \DisplayProof
+\end{align}
 
 
 \begin{align}
@@ -54,16 +61,6 @@
   \BinaryInfC{$\Gamma \vdash \Pi x : M_{1} , M_{2} \; : \; Prop $}
   \DisplayProof
 \end{align}
-
-
-\begin{align}
-  \AxiomC{$\Gamma \vdash M_{1} : T_{1} \quad T_{1} \whnf \Pi x : A, B $}
-  \AxiomC{$\Gamma \vdash M_{2} : A' \quad A' \leq A $}
-  \tag{App-Rule1}
-  \BinaryInfC{$\Gamma \vdash M_{1} M_{2} \; : \; [M_{2}/x]B $}
-  \DisplayProof
-\end{align}
-
 
 
 \begin{align}
