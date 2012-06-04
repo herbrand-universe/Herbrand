@@ -16,4 +16,5 @@ val whnf : context -> Term.term -> Term.term
 val whnf_is_kind : context -> Term.term -> bool
 val get_whnf_kind : context -> Term.term -> Term.sort
 val get_whnf_pi : context -> Term.term -> Term.term * Term.term
+val get_whnf_sigma : context -> Term.term -> Term.term * Term.term
 

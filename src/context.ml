@@ -57,3 +57,5 @@ let get_whnf_kind c t = match whnf c t with
 let get_whnf_pi c t = match whnf c t with
   | Pi (a,b) -> a,b
 
+let get_whnf_sigma c t = match whnf c t with
+  | Sigma (a,b) -> a,b
