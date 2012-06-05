@@ -59,3 +59,4 @@ let get_whnf_pi c t = match whnf c t with
 
 let get_whnf_sigma c t = match whnf c t with
   | Sigma (a,b) -> a,b
+

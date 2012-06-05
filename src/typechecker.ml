@@ -8,9 +8,18 @@ exception Error
 
 
 (******************************************************************************
+ * val downArr c t1 t2 : context -> term -> term -> bool
  *
+ *   This is the well known CONV rule. 
+ *
+ * Right now, is a conversion up to beta - delta reduction.
+ *
+ *   We should prove that under the assumption that the terms are SN its
+ * equivanlent reduce to weak head normal form instead of normal form.
+ *
+ *   I suppose that is enough to known that the relation beta-delta is confluent
+ * and the theory have the SN property.
  ******************************************************************************)
-
 let rec downArr c t1 t2 = match C.whnf c t1,C.whnf c t2 with
   | Sort (Type a), Sort (Type b)   -> a = b
   | Pi    (x1,x2), Pi (y1,y2)      -> (downArr c x1 y1) && (downArr c x2 y2)
@@ -28,7 +37,9 @@ let rec downArr c t1 t2 = match C.whnf c t1,C.whnf c t2 with
 
 
 (******************************************************************************
+ * val leq c n m : context -> term -> term -> bool
  *
+ *  This is <= relation over the universe hierarchy.
  ******************************************************************************)
 let rec leq c n m = match C.whnf c n, C.whnf c m with
   | s  ,   t  when (downArr c s t) -> true
@@ -40,25 +51,27 @@ let rec leq c n m = match C.whnf c n, C.whnf c m with
 
 
 (******************************************************************************
+ * val typeof : context -> term -> term -> bool
  *
+ *  
  ******************************************************************************)
 let rec typeof c = function
-  | Sort Prop      -> Sort (Type 0)
-  | Sort (Type a)  -> Sort (Type (a + 1))
-  | Id n        when (C.inLocal c n)   -> C.getLocal c n
-  | Var x       when (C.inGlobal c x)       -> C.getType c x
-  | App (m,n)      when (test pAppRule c m n)   -> cAppRule c m n
-  | Pi  (a,b)      when (test pGenRule c a b)   -> cGenRule c a b
-  | Lam (a,m)      when (test pAbsRule c a m)   -> cAbsRule c a m
-  | Sigma (a,m)    when (test pSigmaRule c a m)   -> cSigmaRule c a m
-  | Pair (a,n, m)  when (test pPairRule c a m)  -> cPairRule c a m
-  | L m            when (test2 pProjRule c m)  -> cLeftRule c m
-  | R m            when (test2 pProjRule c m)  -> cRightRule c m
-  
-  | _                                       -> raise Error
+  | Sort Prop                                      -> Sort (Type 0)
+  | Sort (Type a)                                  -> Sort (Type (a + 1))
+  | Id n           when (C.inLocal c n)            -> C.getLocal c n
+  | Var x          when (C.inGlobal c x)           -> C.getType c x
+  | App (m,n)      when (test pAppRule c m n)      -> cAppRule c m n
+  | Pi  (a,b)      when (test pGenRule c a b)      -> cGenRule c a b
+  | Lam (a,m)      when (test pAbsRule c a m)      -> cAbsRule c a m
+  | Sigma (a,m)    when (test pSigmaRule c a m)    -> cSigmaRule c a m
+  | Pair (a,n, m)  when (test3 pPairRule c a n m)  -> cPairRule c a n m
+  | L m            when (test2 pProjRule c m)      -> cLeftRule c m
+  | R m            when (test2 pProjRule c m)      -> cRightRule c m
+  | _                                              -> raise Error
 
-and test f a b c = try f a b c with _ -> false
-and test2 f a b = try f a b with _ -> false
+and test f a b c    = try f a b c with _ -> false
+and test2 f a b     = try f a b with _ -> false
+and test3 f a b c d = try f a b c d with _ -> false
 
 (******************************************************************************
  * val validType : context -> term -> bool                       (or EXCEPTION!)
@@ -155,12 +168,25 @@ and cSigmaRule c a b =
 
 (******************************************************************************
  *
+ *      C = Sigma (A,B)     G |- C : T      T ->> k
+ *      G |- M1 : T1                    T1 <= A
+ *      G |- M2 : T2                    T2 <= [M/1]B
+ *  ----------------------------------------------------------          (A-Pair)
+ *      G |- Pair C (M1,M2) : C
+ * 
  ******************************************************************************)
-and pPairRule g c t1 = true 
-and cPairRule g c t1  = Sort Prop
+and pPairRule g c m1 m2 = match c with
+  | Sigma (a,b) -> (validType g c) && (leq g (typeof g m1) a) 
+                   && (leq g (typeof g m2) (dBsubs 1 m1 b))
+  | _ -> false
+
+and cPairRule g c _ _ = c
 
 (******************************************************************************
  *
+ *    G |- M : T          T ->> Sigma (A,B)
+ *  ----------------------------------------------------------          (A-Left)
+ *              G |-  Left  M  :  A
  ******************************************************************************)
 and pProjRule g m = 
    let t = typeof g m in
@@ -173,6 +199,12 @@ and cLeftRule g m =
    let a,_ = C.get_whnf_sigma g t in
    a
 
+(******************************************************************************
+ *
+ *    G |- M : T          T ->> Sigma (A,B)
+ *  ----------------------------------------------------------         (A-Right)
+ *              G |-  Right  M  :  [Left M/1] B
+ ******************************************************************************)
 and cRightRule g m =
    let t = typeof g m in
    let _,b = C.get_whnf_sigma g t in
