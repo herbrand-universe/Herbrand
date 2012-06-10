@@ -19,8 +19,8 @@
   * (b) (**Done**) Terminar las reglas de ECC
   * (c) Ver que falta para volver a tener definiciones. (esto esta incompleto ahora, *leq* creo que tiene que expandir)
   * (d) Agregar sintaxis para *pair*, *right* y *left*
-        * (**Done**) fst y snd.
-        * (d'') Agregar para *pair*
+        ** (**Done**) fst y snd.
+        ** (d'') Agregar para *pair*
   * (e) Extender ECC con *A + B*, *inl*, *inr*, *case* (primero pensarlas y agregarlas a reglas.tex)
   * (f) Ver como definir conjuntos enumerados.
   * (g) Tipos de datos inductivos.
