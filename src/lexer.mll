@@ -10,6 +10,8 @@ let keywords_symbols =
     "Prop",    PROP;
     "Type",    TYPE;
     "Pair",    PAIR;
+    "fst",     FST;
+    "snd",     SND;
   ]
 
 let tactics_keywords =

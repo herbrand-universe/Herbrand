@@ -26,8 +26,8 @@ let rec downArr c t1 t2 = match C.whnf c t1,C.whnf c t2 with
   | Sigma (x1,x2), Sigma (y1,y2)   -> (downArr c x1 y1) && (downArr c x2 y2)
   | Lam   (x1,x2), Lam (y1,y2)     -> (downArr c x1 y1) && (downArr c x2 y2)
   | App   (x1,x2), App (y1,y2)     -> (downArr c x1 y1) && (downArr c x2 y2)
-  | L x          , L y             -> downArr c x y
-  | R x          , R y             -> downArr c x y
+  | Fst x        , Fst y           -> downArr c x y
+  | Snd x        , Snd y           -> downArr c x y
   | Pair (s,x1,x2), Pair (t,y1,y2) -> (downArr c s t) && (downArr c x1 y1) && (downArr c x2 y2)
   | Var x, Var y when (x = y)      -> true
   | Id  x , Id y when (x = y)      -> true
@@ -65,8 +65,8 @@ let rec typeof c = function
   | Lam (a,m)      when (test pAbsRule c a m)      -> cAbsRule c a m
   | Sigma (a,m)    when (test pSigmaRule c a m)    -> cSigmaRule c a m
   | Pair (a,n, m)  when (test3 pPairRule c a n m)  -> cPairRule c a n m
-  | L m            when (test2 pProjRule c m)      -> cLeftRule c m
-  | R m            when (test2 pProjRule c m)      -> cRightRule c m
+  | Fst m          when (test2 pProjRule c m)      -> cFstRule c m
+  | Snd m          when (test2 pProjRule c m)      -> cSndRule c m
   | _                                              -> raise Error
 
 and test f a b c    = try f a b c with _ -> false
@@ -185,8 +185,8 @@ and cPairRule g c _ _ = c
 (******************************************************************************
  *
  *    G |- M : T          T ->> Sigma (A,B)
- *  ----------------------------------------------------------          (A-Left)
- *              G |-  Left  M  :  A
+ *  ----------------------------------------------------------           (A-Fst)
+ *              G |-  fst  M  :  A
  ******************************************************************************)
 and pProjRule g m = 
    let t = typeof g m in
@@ -194,7 +194,7 @@ and pProjRule g m =
      | Sigma (_,_)   -> true
      | _             -> false
 
-and cLeftRule g m =
+and cFstRule g m =
    let t = typeof g m in
    let a,_ = C.get_whnf_sigma g t in
    a
@@ -202,11 +202,11 @@ and cLeftRule g m =
 (******************************************************************************
  *
  *    G |- M : T          T ->> Sigma (A,B)
- *  ----------------------------------------------------------         (A-Right)
- *              G |-  Right  M  :  [Left M/1] B
+ *  ----------------------------------------------------------          (A-Snd)
+ *              G |-  snd  M  :  [Left M/1] B
  ******************************************************************************)
-and cRightRule g m =
+and cSndRule g m =
    let t = typeof g m in
    let _,b = C.get_whnf_sigma g t in
-   (dBsubs 1 (L m) b)
+   (dBsubs 1 (Fst m) b)
 

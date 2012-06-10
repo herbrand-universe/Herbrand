@@ -28,8 +28,8 @@ type term =
   | Pi    of term * term
   | Sigma of term * term
   | Pair  of term * term * term
-  | L     of term
-  | R     of term
+  | Fst   of term
+  | Snd   of term
 
 
 val pp_term : Format.formatter -> term -> unit

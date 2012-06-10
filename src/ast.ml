@@ -15,8 +15,8 @@ type astTerm =
   | APi    of name * astTerm * astTerm
   | ASigma of name * astTerm * astTerm
   | APair  of astTerm * astTerm * astTerm
-  | AL     of astTerm
-  | AR     of astTerm
+  | AFst   of astTerm
+  | ASnd   of astTerm
 
 
 type prop =
@@ -52,8 +52,8 @@ let rec freeVar n = function
   | ALam   (n1,s,t) when (n <> n1)   -> (freeVar n s) || (freeVar n t)
   | APi    (n1,s,t) when (n <> n1)   -> (freeVar n s) || (freeVar n t)
   | ASigma (n1,s,t) when (n <> n1)   -> (freeVar n s) || (freeVar n t)
-  | AL t                             -> freeVar n t 
-  | AR t                             -> freeVar n t
+  | AFst t                           -> freeVar n t 
+  | ASnd t                           -> freeVar n t
   | APair (s,t1,t2)                  -> (freeVar n s) || (freeVar n t1) || (freeVar n t2) 
   | _                                -> false
 
@@ -74,6 +74,6 @@ let rec pp_astTerm fmt = function
     fprintf fmt "<%a,%a>" pp_astTerm t1 pp_astTerm t2
   | APair (s,t1,t2)  ->
     fprintf fmt "pair [%a][%a,%a]" pp_astTerm s pp_astTerm t1 pp_astTerm t2
-  | AR t  -> fprintf fmt "Right(%a)" pp_astTerm t
-  | AL t  -> fprintf fmt "Left(%a)" pp_astTerm t
+  | AFst t  -> fprintf fmt "fst(%a)" pp_astTerm t
+  | ASnd t  -> fprintf fmt "snd(%a)" pp_astTerm t
 

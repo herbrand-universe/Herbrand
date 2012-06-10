@@ -9,7 +9,7 @@
 %token DEF SHOW PROOF END ALL
 %token EQ CHECK WITH WHNF ID INFER SHOW QUIT
 %token COLON DOT COMMA TSEP ARROW
-%token LAM PI PROP TYPE SIGMA PAIR
+%token LAM PI PROP TYPE SIGMA PAIR FST SND
 %token AND OR IMP NOT EXISTS FORALL TRUE FALSE
 %token LPAREN RPAREN
 %token LT GT
@@ -49,6 +49,8 @@ term:
 | term ARROW term                  { APi ("1$",$1,$3)}
 | LAM ident COLON term COMMA term  { ALam ($2,$4,$6) }
 | term term                        { AApp ($1,$2) }
+| FST term                         { AFst $2 }
+| SND term                         { ASnd $2 }
 ;
 
 number:

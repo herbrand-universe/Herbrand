@@ -12,8 +12,8 @@ type astTerm =
   | APi    of name * astTerm * astTerm
   | ASigma of name * astTerm * astTerm
   | APair  of astTerm * astTerm * astTerm
-  | AL     of astTerm
-  | AR     of astTerm
+  | AFst   of astTerm
+  | ASnd   of astTerm
 
 
 type prop =

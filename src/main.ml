@@ -16,20 +16,21 @@ let state = {
 }
 
 
-(*
-let pp_res fmt (a,b) = pp_term fmt a; pp_lconstr fmt b
-
 let process_def (n, def) =
-  let t = toDeBruijn def in
-  let ty,constr = typeof state.gamma t in
-  state.gamma <- (C.addGlobal state.gamma n t ty constr)
-  *)
+  try
+    let t = toDeBruijn def in
+    let ty = typeof state.gamma t in
+    let k = typeof state.gamma ty in
+    C.get_whnf_kind state.gamma k;
+    state.gamma <- (C.addGlobal state.gamma n t ty)
+  with _ -> Format.printf "Term not well typed!@\n"
+  
 
 (* Aca empieza todo a fines practicos *)
 let main = function
 (* | Gassume (n,t)     -> state.gamma <- (Context.addGlobal state.gamma n (toDeBruijn t))*)
-(* | Gdef  (n,t) when not (C.inGlobal state.gamma n)    -> process_def (n,t) 
- | Gdef  (n,_)       -> Format.printf "The name [%s] is alredy in use@\n" n*)
+ | Gdef  (n,t) when not (C.inGlobal state.gamma n)    -> process_def (n,t) 
+ | Gdef  (n,_)       -> Format.printf "The name [%s] is alredy in use@\n" n
  | Gproof (n,p)      -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (prop2term p))
  | Gshow t           -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (toDeBruijn t))
  | Ginfer t          -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (typeof state.gamma (toDeBruijn t)))

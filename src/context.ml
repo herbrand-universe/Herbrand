@@ -34,15 +34,15 @@ let rec whnf c = function
       | Lam (_,t)   -> whnf c (Term.dBsubs 1 t2 t) 
       | t           -> App (t,t2))
 
-  | R t          ->
+  | Snd t          ->
     (match whnf c t with
       | Pair (_,_,t2)   -> whnf c t2
-      | t               -> R t)
+      | t               -> Snd t)
 
-  | L t          ->
+  | Fst t          ->
     (match whnf c t with
       | Pair (_,t1,_)   -> whnf c t1
-      | t               -> L t)
+      | t               -> Fst t)
 
   | Var x        -> whnf c (getDef c x)
   | t            -> t

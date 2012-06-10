@@ -31,8 +31,8 @@ type term =
   | Pi    of term * term
   | Sigma of term * term
   | Pair  of term * term * term
-  | L     of term
-  | R     of term
+  | Fst   of term
+  | Snd   of term
 
 
 
@@ -51,9 +51,9 @@ let rec subs v t = function
   | Sigma (t1,t2)   -> Sigma  (subs v t t1, subs v t t2)
   | App   (t1,t2)   -> App (subs v t t1, subs v t t2)
   | Pair  (s,t1,t2) -> Pair (subs v t s,subs v t t1, subs v t t2)
-  | L s             -> L (subs v t s)
-  | R s             -> R (subs v t s)
-  | term          -> term 
+  | Fst s           -> Fst (subs v t s)
+  | Snd s           -> Snd (subs v t s)
+  | term            -> term 
   
   
 (* ****************************************************************************
@@ -71,8 +71,8 @@ let rec dBsubs n t = function
   | Pi  (ty,t1)        -> Pi  (dBsubs n t ty, dBsubs (n+1) t t1)
   | Sigma  (ty,t1)     -> Sigma  (dBsubs n t ty, dBsubs (n+1) t t1)
   | Pair (s,t1,t2)     -> Pair (dBsubs n t s, dBsubs n t t1, dBsubs n t t2)
-  | L s                -> L (dBsubs n t s)
-  | R s                -> R (dBsubs n t s)
+  | Fst s              -> Fst (dBsubs n t s)
+  | Snd s              -> Snd (dBsubs n t s)
   | Sort s             -> Sort s
 
 
@@ -97,8 +97,8 @@ let toDeBruijn =
     | ASigma (n, at, at') -> Sigma (toDeBruijnCtx ctx at, toDeBruijnCtx (n::ctx) at')
     | AApp (at, at') -> App (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
     | APair (n,at,at') -> Pair(toDeBruijnCtx ctx n, toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
-    | AL at            -> L (toDeBruijnCtx ctx at)
-    | AR at            -> R (toDeBruijnCtx ctx at)
+    | AFst at            -> Fst (toDeBruijnCtx ctx at)
+    | ASnd at            -> Snd (toDeBruijnCtx ctx at)
   in toDeBruijnCtx []
 
 let pp_sort fmt = function
@@ -118,8 +118,8 @@ let rec fromDeBruijn = function
   | Lam (s,t)       -> let n = freshVar () in ALam (n,fromDeBruijn s, fromDeBruijn (dBsubs 1 (Var n) t))
   | Sigma (s,t)     -> let n = freshVar () in ASigma (n,fromDeBruijn s, fromDeBruijn (dBsubs 1 (Var n) t))
   | Pair (s,t1,t2)  -> APair (fromDeBruijn s, fromDeBruijn t1, fromDeBruijn t2)
-  | L t             -> AL (fromDeBruijn t)
-  | R t             -> AR (fromDeBruijn t)
+  | Fst t             -> AFst (fromDeBruijn t)
+  | Snd t             -> ASnd (fromDeBruijn t)
 
 let rec pp_term fmt = function
   | Var name        -> fprintf fmt "%s" name
