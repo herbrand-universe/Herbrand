@@ -31,7 +31,7 @@
 
 **Limpieza**
 ***
-   * Pensar que nombre les ponemos a los constructores "L" y "R" son una cagada
+   * (**Donde**) Pensar que nombre les ponemos a los constructores "L" y "R" son una cagada (**Fst,Snd**)
    * context.ml es un asco, desde los nombres de funciones hasta la forma en que esta escrito el codigo
    * El contexto gloabal, hay que hacerlo global. El que se pasa a las funciones debería ser unicamente el local (el de los indices)
    * downArr es la equivalencia de terminos (beta-delta). Debería tener otro nombre.
