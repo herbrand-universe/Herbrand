@@ -18,16 +18,15 @@
   * (a) Ordenamos
   * (b) (**Done**) Terminar las reglas de ECC
   * (c) Ver que falta para volver a tener definiciones. (esto esta incompleto ahora, *leq* creo que tiene que expandir)
-  * (d) Agregar sintaxis para *pair*, *right* y *left*
-        ** (**Done**) fst y snd.
-        ** (d'') Agregar para *pair*
-  * (e) Extender ECC con *A + B*, *inl*, *inr*, *case* (primero pensarlas y agregarlas a reglas.tex)
-  * (f) Ver como definir conjuntos enumerados.
-  * (g) Tipos de datos inductivos.
-  * (h) Definir un tipo *goal* para hacerlo visible al script
-  * (i) Definir *intro* y *apply* a nivel de usuario
-  * (j) Crea un archivo de definiciones básicas, que se cargue con un pseudo include
-  * (k) Instanciar Proof General.
+  * (d) Agregar sintaxis para *pair*
+  * (e) (**Done**) Agregar sintaxis para *fst* y *snd*
+  * (f) Extender ECC con *A + B*, *inl*, *inr*, *case* (primero pensarlas y agregarlas a reglas.tex)
+  * (g) Ver como definir conjuntos enumerados.
+  * (h) Tipos de datos inductivos.
+  * (i) Definir un tipo *goal* para hacerlo visible al script
+  * (j) Definir *intro* y *apply* a nivel de usuario
+  * (k) Crea un archivo de definiciones básicas, que se cargue con un pseudo include
+  * (l) Instanciar Proof General.
 
 
 **Limpieza**
