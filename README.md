@@ -5,6 +5,8 @@
    * **Def name = term** debería definir una variable en el contexto global.
    * **Proof name = prop** debería ser el comienzo de una prueba de <prop>.
    * **End** debería ser el final de una prueba.
+  
+   * **test** ejecuta los tests definidos en *tests.ml* (**New**)
 
    * **infer** dado un **astTerm** retorna el tipo y el conjunto de restricciones.
    * **check** dado dos **astTerm** chequea si son equivalentes y bajo que restricciones.
