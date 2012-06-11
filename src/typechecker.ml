@@ -8,7 +8,7 @@ exception Error
 
 
 (******************************************************************************
- * val downArr c t1 t2 : context -> term -> term -> bool
+ * val conv c t1 t2 : context -> term -> term -> bool
  *
  *   This is the well known CONV rule. 
  *
@@ -20,15 +20,15 @@ exception Error
  *   I suppose that is enough to known that the relation beta-delta is confluent
  * and the theory have the SN property.
  ******************************************************************************)
-let rec downArr c t1 t2 = match C.whnf c t1,C.whnf c t2 with
+let rec conv c t1 t2 = match C.whnf c t1,C.whnf c t2 with
   | Sort (Type a), Sort (Type b)   -> a = b
-  | Pi    (x1,x2), Pi (y1,y2)      -> (downArr c x1 y1) && (downArr c x2 y2)
-  | Sigma (x1,x2), Sigma (y1,y2)   -> (downArr c x1 y1) && (downArr c x2 y2)
-  | Lam   (x1,x2), Lam (y1,y2)     -> (downArr c x1 y1) && (downArr c x2 y2)
-  | App   (x1,x2), App (y1,y2)     -> (downArr c x1 y1) && (downArr c x2 y2)
-  | Fst x        , Fst y           -> downArr c x y
-  | Snd x        , Snd y           -> downArr c x y
-  | Pair (s,x1,x2), Pair (t,y1,y2) -> (downArr c s t) && (downArr c x1 y1) && (downArr c x2 y2)
+  | Pi    (x1,x2), Pi (y1,y2)      -> (conv c x1 y1) && (conv c x2 y2)
+  | Sigma (x1,x2), Sigma (y1,y2)   -> (conv c x1 y1) && (conv c x2 y2)
+  | Lam   (x1,x2), Lam (y1,y2)     -> (conv c x1 y1) && (conv c x2 y2)
+  | App   (x1,x2), App (y1,y2)     -> (conv c x1 y1) && (conv c x2 y2)
+  | Fst x        , Fst y           -> conv c x y
+  | Snd x        , Snd y           -> conv c x y
+  | Pair (s,x1,x2), Pair (t,y1,y2) -> (conv c s t) && (conv c x1 y1) && (conv c x2 y2)
   | Var x, Var y when (x = y)      -> true
   | Id  x , Id y when (x = y)      -> true
   | Sort (Prop), Sort (Prop)       -> true
@@ -40,12 +40,13 @@ let rec downArr c t1 t2 = match C.whnf c t1,C.whnf c t2 with
  * val leq c n m : context -> term -> term -> bool
  *
  *  This is <= relation over the universe hierarchy.
+ *
  ******************************************************************************)
 let rec leq c n m = match C.whnf c n, C.whnf c m with
-  | s  ,   t  when (downArr c s t) -> true
+  | s  ,   t  when (conv c s t) -> true
   | Sort Prop, Sort (Type a)       -> true
   | Sort (Type a), Sort (Type b)   -> a < b
-  | Pi (a1,a2), Pi (b1,b2)         -> (downArr c a1 b1) && (leq c a2 b2)
+  | Pi (a1,a2), Pi (b1,b2)         -> (conv c a1 b1) && (leq c a2 b2)
   | Sigma (a1,a2), Sigma (b1,b2)   -> (leq c a1 b1) && (leq c a2 b2)
   | _                              -> false
 
