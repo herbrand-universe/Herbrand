@@ -24,6 +24,7 @@ let global_keywords =
     "Show",    SHOW;
     "Proof",   PROOF;
     "End",     END;
+    "test",    TEST;
     "all",     ALL;
 
     (* Logic *)

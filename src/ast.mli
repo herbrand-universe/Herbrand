@@ -37,6 +37,7 @@ type global =
   | Gshow_all
   | Gwhnf    of astTerm
   | Gcheck   of astTerm * astTerm
+  | Gtest
   | Gquit 
 
 val pp_astTerm : Format.formatter -> astTerm -> unit

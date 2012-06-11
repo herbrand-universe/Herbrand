@@ -3,8 +3,8 @@ open Term
 open Logic
 open Format
 open Typechecker
-open Tests (* Al incluirlo se van a ejecutar los tests *)
-
+(*open Tests (* Al incluirlo se van a ejecutar los tests *)
+*)
 module C = Context
 
 type state = {
@@ -34,6 +34,7 @@ let main = function
  | Gproof (n,p)      -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (prop2term p))
  | Gshow t           -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (toDeBruijn t))
  | Ginfer t          -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (typeof state.gamma (toDeBruijn t)))
+ | Gtest             -> Tests.check_all ()
  | Gquit             -> raise Lexer.Eof
  | _                 -> () 
 

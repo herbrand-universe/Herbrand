@@ -39,6 +39,7 @@ type global =
   | Gshow_all
   | Gwhnf    of astTerm
   | Gcheck   of astTerm * astTerm
+  | Gtest
   | Gquit
 
 let pp_sort fmt = function
