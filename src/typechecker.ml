@@ -43,11 +43,13 @@ let rec conv c t1 t2 = match C.whnf c t1,C.whnf c t2 with
  *
  ******************************************************************************)
 let rec leq c n m = match C.whnf c n, C.whnf c m with
-  | s  ,   t  when (conv c s t) -> true
+  | s  ,   t  when (conv c s t)    -> true
   | Sort Prop, Sort (Type a)       -> true
   | Sort (Type a), Sort (Type b)   -> a < b
   | Pi (a1,a2), Pi (b1,b2)         -> (conv c a1 b1) && (leq c a2 b2)
   | Sigma (a1,a2), Sigma (b1,b2)   -> (leq c a1 b1) && (leq c a2 b2)
+  | Var s, t                       -> leq c (C.getDef c s) t
+  | s    , Var t                   -> leq c s (C.getDef c t)
   | _                              -> false
 
 
