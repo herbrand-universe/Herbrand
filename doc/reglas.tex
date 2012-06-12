@@ -111,5 +111,52 @@
 \end{align}
 
 
+\paragraph{Reglas de ECC no dirigidas por sintaxis}
+Si bien hay una por cada construcci\'on falta pensar el tema de $\leq$.
+
+
+\paragraph{}{\bf The Extended Calculus of Constructions with Inductive Types (Ore)}
+
+
+\begin{align}
+\tag{$+$ Rule}
+\AxiomC{$\Gamma \vdash A : Type_{j}$}
+\AxiomC{$\Gamma \vdash B : Type_{j}$}
+\BinaryInfC{$\Gamma \vdash A + B : Type_{j}$}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{$inl$-Rule}
+\AxiomC{$\Gamma \vdash L : A$}
+\AxiomC{$\Gamma \vdash A : Type_{j} $}
+\AxiomC{$\Gamma \vdash B : Type_{j} $}
+\TrinaryInfC{$\Gamma \vdash inl_{A+B} L : A + B$}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{$inr$-Rule}
+\AxiomC{$\Gamma \vdash L : B$}
+\AxiomC{$\Gamma \vdash A : Type_{j} $}
+\AxiomC{$\Gamma \vdash B : Type_{j} $}
+\TrinaryInfC{$\Gamma \vdash inr_{A+B} L : A + B$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{$Case$-Rule}
+%\DisplayProof
+\end{align}
 
 \end{document}
+
+
+
+\begin{align}
+\tag{}
+\AxiomC{}
+\UnaryInfC{}
+\DisplayProof
+\end{align}
