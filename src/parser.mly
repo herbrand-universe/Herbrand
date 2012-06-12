@@ -6,7 +6,7 @@
 /* Parser para Herbrand */
 %token <string> IDENT
 %token <int> NUM
-%token DEF SHOW PROOF END ALL TEST
+%token DEF SHOW PROOF END ALL TEST VAR
 %token EQ CHECK WITH WHNF ID INFER SHOW QUIT
 %token COLON DOT COMMA TSEP ARROW
 %token LAM PI PROP TYPE SIGMA PAIR FST SND
@@ -24,6 +24,7 @@ global:
 ;
 
 global_elem:
+|  VAR ident COLON term    { Gvar ($2,$4) }
 |  DEF ident EQ term       { Gdef ($2,$4) }
 |  PROOF ident EQ prop     { Gproof ($2,$4) }
 |  END                     { Gend }
@@ -64,13 +65,13 @@ ident:
 ;
 
 prop:
-| ident                                { Gvar $1 }
+| ident                                { Lvar $1 }
 | LPAREN prop RPAREN                   { $2 }
-| NOT prop                             { Gnot $2 }
-| prop AND prop                        { Gand ($1,$3) }
-| prop OR  prop                        { Gor  ($1,$3) }
-| prop IMP prop                        { Gimp ($1,$3) }
-| FORALL ident COLON term COMMA prop   { Gforall ($2,$4,$6) }
-| EXISTS ident COLON term COMMA prop   { Gexists ($2,$4,$6) }
-| TRUE	       	     	  	       { Gtrue }
-| FALSE				       { Gfalse }
+| NOT prop                             { Lnot $2 }
+| prop AND prop                        { Land ($1,$3) }
+| prop OR  prop                        { Lor  ($1,$3) }
+| prop IMP prop                        { Limp ($1,$3) }
+| FORALL ident COLON term COMMA prop   { Lforall ($2,$4,$6) }
+| EXISTS ident COLON term COMMA prop   { Lexists ($2,$4,$6) }
+| TRUE	       	     	  	       { Ltrue }
+| FALSE				       { Lfalse }

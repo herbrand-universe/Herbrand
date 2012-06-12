@@ -17,19 +17,20 @@ type astTerm =
 
 
 type prop =
-  | Gtrue
-  | Gfalse
-  | Gvar of name
-  | Gnot of prop
-  | Gand of prop * prop
-  | Gor  of prop * prop
-  | Gimp of prop * prop
-  | Gforall of name * astTerm * prop
-  | Gexists of name * astTerm * prop
+  | Ltrue
+  | Lfalse
+  | Lvar of name
+  | Lnot of prop
+  | Land of prop * prop
+  | Lor  of prop * prop
+  | Limp of prop * prop
+  | Lforall of name * astTerm * prop
+  | Lexists of name * astTerm * prop
 
 
 type global = 
   | Gdef     of name * astTerm
+  | Gvar     of name * astTerm
   | Gproof   of name * prop
   | Gend
   | Ginfer   of astTerm

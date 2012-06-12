@@ -25,6 +25,7 @@ let global_keywords =
   [
     (**)
     "Def",     DEF; 
+    "Var",     VAR;
     "Show",    SHOW;
     "Proof",   PROOF;
     "End",     END;

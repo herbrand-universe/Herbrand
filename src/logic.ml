@@ -2,14 +2,14 @@ open Ast
 open Term
 
 let rec prop2astTerm = function 
-  | Gtrue -> prop2astTerm (Gforall ("X", (ASort AProp), (Gimp ((Gvar "X"), (Gvar "X")))))
-  | Gfalse -> prop2astTerm (Gforall ("X", (ASort AProp), (Gvar "X")))
-  | Gvar n -> AVar n
-  | Gnot p -> prop2astTerm (Gimp (p, Gfalse))
-  | Gand (p, q) -> prop2astTerm (Gforall ("X", (ASort AProp), (Gimp ((Gimp (p, (Gimp (q, (Gvar "X"))))), (Gvar "X")))))
-  | Gor  (p, q) -> prop2astTerm (Gforall ("X", (ASort AProp), (Gimp ((Gimp ((Gimp (p, (Gvar "X"))), (Gimp (q, (Gvar "X"))))), (Gvar "X")))))
-  | Gimp (p, q) -> prop2astTerm (Gforall (("0$"), (prop2astTerm p), q))
-  | Gforall (n, t, p) -> APi (n, t, prop2astTerm p)
-  | Gexists (n, t, p) -> prop2astTerm (Gforall (("X"), (ASort AProp), (Gimp ((Gforall (n, t, (Gimp (p, (Gvar "X"))))), (Gvar "X")))))
+  | Ltrue -> prop2astTerm (Lforall ("X", (ASort AProp), (Limp ((Lvar "X"), (Lvar "X")))))
+  | Lfalse -> prop2astTerm (Lforall ("X", (ASort AProp), (Lvar "X")))
+  | Lvar n -> AVar n
+  | Lnot p -> prop2astTerm (Limp (p, Lfalse))
+  | Land (p, q) -> prop2astTerm (Lforall ("X", (ASort AProp), (Limp ((Limp (p, (Limp (q, (Lvar "X"))))), (Lvar "X")))))
+  | Lor  (p, q) -> prop2astTerm (Lforall ("X", (ASort AProp), (Limp ((Limp ((Limp (p, (Lvar "X"))), (Limp (q, (Lvar "X"))))), (Lvar "X")))))
+  | Limp (p, q) -> prop2astTerm (Lforall (("0$"), (prop2astTerm p), q))
+  | Lforall (n, t, p) -> APi (n, t, prop2astTerm p)
+  | Lexists (n, t, p) -> prop2astTerm (Lforall (("X"), (ASort AProp), (Limp ((Lforall (n, t, (Limp (p, (Lvar "X"))))), (Lvar "X")))))
 
 let prop2term f = toDeBruijn (prop2astTerm f)
