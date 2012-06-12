@@ -147,7 +147,60 @@ Si bien hay una por cada construcci\'on falta pensar el tema de $\leq$.
 
 \begin{align}
 \tag{$Case$-Rule}
-%\DisplayProof
+\AxiomC{$\Gamma, x : A + B \vdash C : Type_{j}$}
+\noLine
+\UnaryInfC{$\Gamma, x : A + B \vdash M : \Pi y : A. [inl\; y/x] C$}
+\noLine
+\UnaryInfC{$\Gamma, x : A + B \vdash N : \Pi y : B. [inr\; y/x] C$}
+\UnaryInfC{$\Gamma, x : A+B \vdash case(x,M,N) : C $}
+\DisplayProof
+\end{align}
+
+\paragraph{?`Como mierda queda cuando uno distribuye conv y cum?}
+
+\paragraph{}Creo que en las reglas inr-Rule y inl-Rule, se puede cambiar esto:
+\begin{center}
+$\Gamma \vdash A : Type_{j} \quad \Gamma \vdash B : Type_{j} $
+\end{center}
+
+por esto:
+
+\begin{center}
+$\Gamma \vdash A + B : Type_{j}$
+\end{center}
+
+\paragraph{Creo que las leyes pueden ser estas:}
+
+\begin{align}
+\tag{$+$ Rule}
+\AxiomC{$\Gamma \vdash A : T_{1} \quad T_{1} \whnf Type_{i}$}
+\AxiomC{$\Gamma \vdash B : T_{2} \quad T_{2} \whnf Type_{j}$}
+\BinaryInfC{$\Gamma \vdash A + B : max_{\leq} \{Type_{i},Type_{j}\}$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{$inl$-Rule}
+\AxiomC{$C \equiv A + B$}
+\AxiomC{$\Gamma \vdash L : T \quad T \leq A$}
+\AxiomC{$\Gamma \vdash C : T_{1} \quad T_{1} \whnf Type_{j} $}
+\TrinaryInfC{$\Gamma \vdash inl_{C} \; L : C$}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{$inl$-Rule}
+\AxiomC{$C \equiv A + B$}
+\AxiomC{$\Gamma \vdash L : T \quad T \leq B$}
+\AxiomC{$\Gamma \vdash C : T_{1} \quad T_{1} \whnf Type_{j} $}
+\TrinaryInfC{$\Gamma \vdash inr_{C} \; L : C$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{Case-Rule}
 \end{align}
 
 \end{document}
