@@ -1,24 +1,36 @@
 open Term
+(* ****************************************************************************
+ * Context :
+ *      decl = [a:A][b:B] ... 
+ *      defs = [a=s:A][b=t:B] ...
+ *      
+ *      local = [A,B,C,D] ...   (DeBruijn index)
+ * ***************************************************************************)
 type context = {
-  mutable global : (Term.name * (Term.term * Term.term )) list;
+  mutable decls   : (Term.name * Term.term) list;
+  mutable defs: (Term.name * (Term.term * Term.term )) list;
   mutable local  : Term.term list;
 }
 
 
-let empty () = {global = []; local = []}
+let empty () = {defs = []; decls = []; local = []}
 
-let addGlobal c n t ty = c.global <- (n, (t, ty)) :: c.global; c
+let addDecl c n ty = { c with decls = (n,ty) :: (c.decls)}
+let addDef  c n t ty = { c with defs = (n,(t,ty)) :: c.defs}
 
 let addLocal c t = { c with local = (t :: c.local)}
 
 let inLocal c i = i <= (List.length c.local)
 
-let inGlobal c n = List.mem_assoc n c.global
+let isDecl c n = (List.mem_assoc n c.defs) || (List.mem_assoc n c.decls)
+let isDef c n  = List.mem_assoc n c.defs
 
-let getType c n =   let _,ty=  (List.assoc n c.global) in  ty 
-let getDef  c n =   let t,_  =  (List.assoc n c.global) in  t
 
-let getGlobal c n = List.assoc n c.global
+let getType c n = match  List.mem_assoc n c.decls with
+  | true  -> let ty=  (List.assoc n c.decls) in  ty 
+  | false -> let _,ty=  (List.assoc n c.defs) in  ty
+
+let getDef  c n =   let t,_  =  (List.assoc n c.defs) in  t
 
 let getLocal  c i = List.nth c.local (i-1)
 
@@ -44,7 +56,7 @@ let rec whnf c = function
       | Pair (_,t1,_)   -> whnf c t1
       | t               -> Fst t)
 
-  | Var x        -> whnf c (getDef c x)
+  | Var x    when (isDef c x)   -> whnf c (getDef c x)
   | t            -> t
 
 let whnf_is_kind c t = match whnf c t with

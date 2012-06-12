@@ -62,7 +62,7 @@ let rec typeof c = function
   | Sort Prop                                      -> Sort (Type 0)
   | Sort (Type a)                                  -> Sort (Type (a + 1))
   | Id n           when (C.inLocal c n)            -> C.getLocal c n
-  | Var x          when (C.inGlobal c x)           -> C.getType c x
+  | Var x          when (C.isDecl  c x)            -> C.getType c x
   | App (m,n)      when (test pAppRule c m n)      -> cAppRule c m n
   | Pi  (a,b)      when (test pGenRule c a b)      -> cGenRule c a b
   | Lam (a,m)      when (test pAbsRule c a m)      -> cAbsRule c a m
