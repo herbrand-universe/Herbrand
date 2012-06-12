@@ -12,6 +12,10 @@ let keywords_symbols =
     "Pair",    PAIR;
     "fst",     FST;
     "snd",     SND;
+    "inl",     INL;
+    "inr",     INR;
+    "case",    CASE;
+
   ]
 
 let tactics_keywords =
@@ -79,6 +83,8 @@ rule token = parse
   | "=>"               { IMP }
   | "/\\"              { AND }
   | "\\/"              { OR  }
+
+  | '+'                { PLUS }
 
   | '='                { EQ }
   | '('                { LPAREN }
