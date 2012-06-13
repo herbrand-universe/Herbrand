@@ -29,6 +29,7 @@ type prop =
 
 
 type global = 
+  | Geq      of astTerm * astTerm
   | Gdef     of name * astTerm
   | Gvar     of name * astTerm
   | Gproof   of name * prop

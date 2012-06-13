@@ -42,6 +42,7 @@ let main = function
  | Gproof (n,p)      -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (prop2term p))
  | Gshow t           -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (toDeBruijn t))
  | Ginfer t          -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (typeof state.gamma (toDeBruijn t)))
+ | Geq  (t1,t2)      -> Format.printf "%s@\n" (if (conv state.gamma (toDeBruijn t1) (toDeBruijn t2)) then "Si" else "No")
  | Gtest             -> Tests.check_all ()
  | Gquit             -> raise Lexer.Eof
  | _                 -> () 

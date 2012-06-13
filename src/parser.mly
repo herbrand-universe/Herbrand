@@ -11,7 +11,7 @@
 %token COLON DOT COMMA TSEP ARROW
 %token LAM PI PROP TYPE SIGMA PAIR FST SND
 %token AND OR IMP NOT EXISTS FORALL TRUE FALSE
-%token PLUS INR INL CASE
+%token PLUS INR INL CASE 
 %token LPAREN RPAREN
 %token LT GT
 %token EOL
@@ -27,6 +27,7 @@ global_elem:
 |  VAR ident COLON term    { Gvar ($2,$4) }
 |  DEF ident EQ term       { Gdef ($2,$4) }
 |  PROOF ident EQ prop     { Gproof ($2,$4) }
+|  term EQ term            { Geq ($1,$3) }
 |  END                     { Gend }
 |  INFER term              { Ginfer $2 }
 |  CHECK term WITH term    { Gcheck ($2,$4) }
