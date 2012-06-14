@@ -173,9 +173,9 @@ $\Gamma \vdash A + B : Type_{j}$
 
 \begin{align}
 \tag{$+$ Rule}
-\AxiomC{$\Gamma \vdash A : T_{1} \quad T_{1} \whnf Type_{i}$}
-\AxiomC{$\Gamma \vdash B : T_{2} \quad T_{2} \whnf Type_{j}$}
-\BinaryInfC{$\Gamma \vdash A + B : max_{\leq} \{Type_{i},Type_{j}\}$}
+\AxiomC{$\Gamma \vdash A : T_{1} \quad T_{1} \whnf K$}
+\AxiomC{$\Gamma \vdash B : T_{2} \quad T_{2} \whnf K'$}
+\BinaryInfC{$\Gamma \vdash A + B : max_{\leq} \{Type_{0},K,K'\}$}
 \DisplayProof
 \end{align}
 
