@@ -86,6 +86,8 @@ rule token = parse
   | "\\/"              { OR  }
 
   | '+'                { PLUS }
+  | "={"               { EQLKEY }
+  | '}'                { RKEY} 
 
   | '='                { EQ }
   | '('                { LPAREN }

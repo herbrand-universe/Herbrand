@@ -14,6 +14,7 @@ type astTerm =
   | APair  of astTerm * astTerm * astTerm
   | AFst   of astTerm
   | ASnd   of astTerm
+  | AEq    of astTerm * astTerm * astTerm
 
 
 type prop =
@@ -29,7 +30,6 @@ type prop =
 
 
 type global = 
-  | Geq      of astTerm * astTerm
   | Gdef     of name * astTerm
   | Gvar     of name * astTerm
   | Gproof   of name * prop

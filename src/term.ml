@@ -75,6 +75,17 @@ let rec dBsubs n t = function
   | Snd s              -> Snd (dBsubs n t s)
   | Sort s             -> Sort s
 
+(* ****************************************************************************
+ * Leibniz eq
+ *        =A             is       \x : A, \y : A, Pi P : (A ->Prop), P x -> Py
+ * ***************************************************************************)
+let def_eq a = 
+  let px = AApp (AVar "P",AVar "x") in
+  let py = AApp (AVar "P",AVar "y") in
+  let px_py = APi ("%$", px, py) in
+  let a_prop = APi ("%%",a, ASort AProp) 
+  in 
+    ALam ("x",a,(ALam ("y",a,(APi ("P",a_prop,px_py)))))
 
 (* ****************************************************************************
  * val toDeBruijn : astTerm -> term
@@ -99,6 +110,7 @@ let toDeBruijn =
     | APair (n,at,at') -> Pair(toDeBruijnCtx ctx n, toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
     | AFst at            -> Fst (toDeBruijnCtx ctx at)
     | ASnd at            -> Snd (toDeBruijnCtx ctx at)
+    | AEq (a,s,t)        -> toDeBruijnCtx ctx (AApp (AApp (def_eq a, s),t))
   in toDeBruijnCtx []
 
 let pp_sort fmt = function

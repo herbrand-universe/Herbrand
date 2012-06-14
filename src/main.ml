@@ -19,7 +19,7 @@ let process_decl (n, decl) =
   try
     let ty = toDeBruijn decl in
     let k = typeof state.gamma ty in
-    C.get_whnf_kind state.gamma k;
+    ignore(C.get_whnf_kind state.gamma k);
     state.gamma <- (C.addDecl state.gamma n ty)
   with _ -> Format.printf "Term not well typed!@\n"
 
@@ -28,7 +28,7 @@ let process_def (n, def) =
     let t = toDeBruijn def in
     let ty = typeof state.gamma t in
     let k = typeof state.gamma ty in
-    C.get_whnf_kind state.gamma k;
+    ignore (C.get_whnf_kind state.gamma k);
     state.gamma <- (C.addDef state.gamma n t ty)
   with _ -> Format.printf "Term not well typed!@\n"
   
@@ -42,7 +42,6 @@ let main = function
  | Gproof (n,p)      -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (prop2term p))
  | Gshow t           -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (toDeBruijn t))
  | Ginfer t          -> Format.printf "%a@\n" pp_astTerm (fromDeBruijn (typeof state.gamma (toDeBruijn t)))
- | Geq  (t1,t2)      -> Format.printf "%s@\n" (if (conv state.gamma (toDeBruijn t1) (toDeBruijn t2)) then "Si" else "No")
  | Gtest             -> Tests.check_all ()
  | Gquit             -> raise Lexer.Eof
  | _                 -> () 
