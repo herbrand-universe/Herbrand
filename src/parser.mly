@@ -11,7 +11,7 @@
 %token COLON DOT COMMA TSEP ARROW
 %token LAM PI PROP TYPE SIGMA PAIR FST SND
 %token AND OR IMP NOT EXISTS FORALL TRUE FALSE
-%token PLUS INR INL CASE EQLKEY RKEY
+%token PLUS INR INL CASE EQLKEY LKEY RKEY
 %token LPAREN RPAREN
 %token LT GT
 %token EOL
@@ -54,6 +54,9 @@ term:
 | term term                        { AApp ($1,$2) }
 | FST term                         { AFst $2 }
 | SND term                         { ASnd $2 }
+| INL LKEY term RKEY LKEY term RKEY          { AInl ($3,$6) }
+| INR LKEY term RKEY LKEY term RKEY          { AInr ($3,$6) }
+| term PLUS term                   { ASum ($1,$3) }
 | term EQLKEY term RKEY term       { AEq ($3,$1,$5) }
 ;
 

@@ -29,6 +29,7 @@ let test4 = (Pi (prop,Id 1),prop)
 let test5 = (Pi (prop,prop),type0)
 let test6 = (Lam ((Sigma (prop,prop)),Fst (Id 1)),Pi((Sigma (prop,prop), prop)))
 
+let test7 = (Inl (Sum(type0,type0),prop),(Sum(type0,type0)))
 
 (******************************************************************************
  * val tests = (term, term) list
@@ -47,7 +48,8 @@ let tests =
     test3;
     test4;
     test5;
-    test6
+    test6;
+    test7
   ]
 
 (******************************************************************************

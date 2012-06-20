@@ -30,6 +30,9 @@ type term =
   | Pair  of term * term * term
   | Fst   of term
   | Snd   of term
+  | Inl   of term * term
+  | Inr   of term * term
+  | Sum   of term * term
 
 
 val pp_term : Format.formatter -> term -> unit

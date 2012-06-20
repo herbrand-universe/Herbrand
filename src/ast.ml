@@ -17,6 +17,9 @@ type astTerm =
   | APair  of astTerm * astTerm * astTerm
   | AFst   of astTerm
   | ASnd   of astTerm
+  | AInl   of astTerm * astTerm
+  | AInr   of astTerm * astTerm
+  | ASum   of astTerm * astTerm
   | AEq    of astTerm * astTerm * astTerm
 
 
@@ -79,4 +82,7 @@ let rec pp_astTerm fmt = function
     fprintf fmt "pair [%a][%a,%a]" pp_astTerm s pp_astTerm t1 pp_astTerm t2
   | AFst t  -> fprintf fmt "fst(%a)" pp_astTerm t
   | ASnd t  -> fprintf fmt "snd(%a)" pp_astTerm t
+  | AInl (c,t)  -> fprintf fmt "inl(%a)" pp_astTerm t
+  | AInr (c,t)  -> fprintf fmt "inr(%a)" pp_astTerm t
+  | ASum (a,b)  -> fprintf fmt "((%a) + (%a))" pp_astTerm a pp_astTerm b
 

@@ -33,6 +33,9 @@ type term =
   | Pair  of term * term * term
   | Fst   of term
   | Snd   of term
+  | Inl   of term * term
+  | Inr   of term * term
+  | Sum   of term * term
 
 
 
@@ -53,6 +56,9 @@ let rec subs v t = function
   | Pair  (s,t1,t2) -> Pair (subs v t s,subs v t t1, subs v t t2)
   | Fst s           -> Fst (subs v t s)
   | Snd s           -> Snd (subs v t s)
+  | Inl   (t1,t2)   -> Inl (subs v t t1, subs v t t2)
+  | Inr   (t1,t2)   -> Inr (subs v t t1, subs v t t2)
+  | Sum   (t1,t2)   -> Sum (subs v t t1, subs v t t2)
   | term            -> term 
   
   
@@ -74,6 +80,9 @@ let rec dBsubs n t = function
   | Fst s              -> Fst (dBsubs n t s)
   | Snd s              -> Snd (dBsubs n t s)
   | Sort s             -> Sort s
+  | Inl (t1,t2)        -> Inl ((dBsubs n t t1) ,(dBsubs n t t2))
+  | Inr (t1,t2)        -> Inr ((dBsubs n t t1) ,(dBsubs n t t2))
+  | Sum (t1,t2)        -> Sum ((dBsubs n t t1) ,(dBsubs n t t2))
 
 (* ****************************************************************************
  * Leibniz eq
@@ -110,6 +119,9 @@ let toDeBruijn =
     | APair (n,at,at') -> Pair(toDeBruijnCtx ctx n, toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
     | AFst at            -> Fst (toDeBruijnCtx ctx at)
     | ASnd at            -> Snd (toDeBruijnCtx ctx at)
+    | AInl (at, at') -> Inl (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
+    | AInr (at, at') -> Inr (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
+    | ASum (at, at') -> Sum (toDeBruijnCtx ctx at, toDeBruijnCtx ctx at')
     | AEq (a,s,t)        -> toDeBruijnCtx ctx (AApp (AApp (def_eq a, s),t))
   in toDeBruijnCtx []
 
@@ -132,6 +144,9 @@ let rec fromDeBruijn = function
   | Pair (s,t1,t2)  -> APair (fromDeBruijn s, fromDeBruijn t1, fromDeBruijn t2)
   | Fst t             -> AFst (fromDeBruijn t)
   | Snd t             -> ASnd (fromDeBruijn t)
+  | Inl (s,t)       -> AInl (fromDeBruijn s,fromDeBruijn t)
+  | Inr (s,t)       -> AInr (fromDeBruijn s,fromDeBruijn t)
+  | Sum (s,t)       -> ASum (fromDeBruijn s,fromDeBruijn t)
 
 let rec pp_term fmt = function
   | Var name        -> fprintf fmt "%s" name

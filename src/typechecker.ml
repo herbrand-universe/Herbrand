@@ -26,6 +26,9 @@ let rec conv c t1 t2 = match C.whnf c t1,C.whnf c t2 with
   | Sigma (x1,x2), Sigma (y1,y2)   -> (conv c x1 y1) && (conv c x2 y2)
   | Lam   (x1,x2), Lam (y1,y2)     -> (conv c x1 y1) && (conv c x2 y2)
   | App   (x1,x2), App (y1,y2)     -> (conv c x1 y1) && (conv c x2 y2)
+  | Inl   (x1,x2), Inl (y1,y2)     -> (conv c x1 y1) && (conv c x2 y2)
+  | Inr   (x1,x2), Inr (y1,y2)     -> (conv c x1 y1) && (conv c x2 y2)
+  | Sum   (x1,x2), Sum (y1,y2)     -> (conv c x1 y1) && (conv c x2 y2)
   | Fst x        , Fst y           -> conv c x y
   | Snd x        , Snd y           -> conv c x y
   | Pair (s,x1,x2), Pair (t,y1,y2) -> (conv c s t) && (conv c x1 y1) && (conv c x2 y2)
@@ -48,6 +51,7 @@ let rec leq c n m = match C.whnf c n, C.whnf c m with
   | Sort (Type a), Sort (Type b)   -> a < b
   | Pi (a1,a2), Pi (b1,b2)         -> (conv c a1 b1) && (leq c a2 b2)
   | Sigma (a1,a2), Sigma (b1,b2)   -> (leq c a1 b1) && (leq c a2 b2)
+  | Sum (a1,a2), Sum (b1,b2)       -> (leq c a1 b1) && (leq c a2 b2)
   | Var s, t                       -> leq c (C.getDef c s) t
   | s    , Var t                   -> leq c s (C.getDef c t)
   | _                              -> false
@@ -70,6 +74,9 @@ let rec typeof c = function
   | Pair (a,n, m)  when (test3 pPairRule c a n m)  -> cPairRule c a n m
   | Fst m          when (test2 pProjRule c m)      -> cFstRule c m
   | Snd m          when (test2 pProjRule c m)      -> cSndRule c m
+  | Inl (m,n)      when (test pInlRule c m n)      -> cInlRule c m n
+  | Inr (m,n)      when (test pInrRule c m n)      -> cInrRule c m n
+  | Sum (m,n)      when (test pSumRule c m n)      -> cSumRule c m n
   | _                                              -> raise Error
 
 and test f a b c    = try f a b c with _ -> false
@@ -212,4 +219,44 @@ and cSndRule g m =
    let t = typeof g m in
    let _,b = C.get_whnf_sigma g t in
    (dBsubs 1 (Fst m) b)
+
+
+(******************************************************************************
+ *
+ *    
+ *  ----------------------------------------------------------         
+ *             
+ ******************************************************************************)
+and pInlRule g c m = match c with
+  | Sum (a,b) -> (leq g (typeof g m) a ) && (pSumRule g a b)
+  | _         -> false
+
+and cInlRule g c m = c
+
+
+(******************************************************************************
+ *
+ *    
+ *  ----------------------------------------------------------         
+ *             
+ ******************************************************************************)
+and pInrRule g c m = match c with
+  | Sum (a,b) -> (leq g (typeof g m) b) && (pSumRule g a b)
+  | _         -> false
+
+and cInrRule g c m = c
+
+
+(******************************************************************************
+ *
+ *        G |- A : T1   /\   T1 ->> K1    
+ *        G |- B : T2   /\   T2 ->> K2   
+ *  ----------------------------------------------------------         
+ *            G |-  A + B : max(k1,k2,Type0) 
+ ******************************************************************************)
+and pSumRule g a b = validType g a && validType g b
+and cSumRule g a b = 
+  let k1 = C.get_whnf_kind g (typeof g a) in
+  let k2 = C.get_whnf_kind g (typeof g b) in
+    Sort (max(max (k1,k2),Type 0))
 

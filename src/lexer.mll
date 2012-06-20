@@ -88,6 +88,7 @@ rule token = parse
   | '+'                { PLUS }
   | "={"               { EQLKEY }
   | '}'                { RKEY} 
+  | '{'                { RKEY} 
 
   | '='                { EQ }
   | '('                { LPAREN }

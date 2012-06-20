@@ -14,6 +14,9 @@ type astTerm =
   | APair  of astTerm * astTerm * astTerm
   | AFst   of astTerm
   | ASnd   of astTerm
+  | AInl   of astTerm * astTerm
+  | AInr   of astTerm * astTerm
+  | ASum   of astTerm * astTerm
   | AEq    of astTerm * astTerm * astTerm
 
 
