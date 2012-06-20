@@ -1,0 +1,98 @@
+\section{ECC: Syntax-directed rules}
+\paragraph{} Tambi\'en fueron tomadas de Luo.
+
+\begin{align}
+  \AxiomC{}
+  \tag{KindRule 1}
+  \UnaryInfC{$\Gamma \vdash Prop : Type_{0}$}
+  \DisplayProof
+\end{align}
+
+\begin{align*}
+  \AxiomC{}
+  \tag{KindRule 2}
+  \UnaryInfC{$\Gamma \vdash Type_{i} : Type_{i+1} $}
+  \DisplayProof
+\end{align*}
+
+\begin{align}
+  \AxiomC{$x : A \in \Gamma$}
+  \tag{VarRule}
+  \UnaryInfC{$\Gamma \vdash x : A $}
+  \DisplayProof
+\end{align}
+
+\begin{align}
+  \AxiomC{$\Gamma \vdash M_{1} : T_{1} \quad T_{1} \whnf K $}
+  \AxiomC{$\Gamma, x:M_{1} \vdash M_{2} : T_{2} $}
+  \tag{$\lambda$-Rule}
+  \BinaryInfC{$\Gamma \vdash \lambda x : M_{1} , M_{2} \; : \; \Pi x : M_{1}, T_{2} $}
+  \DisplayProof
+\end{align}
+
+\begin{align}
+  \AxiomC{$\Gamma \vdash M_{1} : T_{1} \quad T_{1} \whnf \Pi x : A, B $}
+  \AxiomC{$\Gamma \vdash M_{2} : A' \quad A' \leq A $}
+  \tag{App-Rule1}
+  \BinaryInfC{$\Gamma \vdash M_{1} M_{2} \; : \; [M_{2}/x]B $}
+  \DisplayProof
+\end{align}
+
+
+\begin{align}
+  \AxiomC{$\Gamma \vdash M_{1} : T_{1} \quad T_{1} \whnf K $}
+  \AxiomC{$\Gamma, x:M_{1} \vdash M_{2} : T_{2} \quad T_{2} \whnf Prop $}
+  \tag{$\Pi$-Rule1}
+  \BinaryInfC{$\Gamma \vdash \Pi x : M_{1} , M_{2} \; : \; Prop $}
+  \DisplayProof
+\end{align}
+
+
+\begin{align}
+  \AxiomC{$\Gamma \vdash M_{1} : T_{1} \quad T_{1} \whnf K $}
+  \AxiomC{$\Gamma, x:M_{1} \vdash M_{2} : T_{2} \quad T_{2} \whnf K' $}
+  \tag{$\Pi$-Rule2}
+  \BinaryInfC{$\Gamma \vdash \Pi x : M_{1} , M_{2} \; : \; max_{\leq}\{K,K'\} $}
+  \DisplayProof
+\end{align}
+
+
+\begin{align}
+  \AxiomC{$\Gamma \vdash M_{1} : T_{1} \quad T_{1} \whnf K $}
+  \AxiomC{$\Gamma, x:M_{1} \vdash M_{2} : T_{2} \quad T_{2} \whnf K' $}
+  \tag{$\Sigma$-Rule}
+  \BinaryInfC{$\Gamma \vdash \Sigma x : M_{1} , M_{2} \; : \; max_{\leq}\{K,K',Type_{0}\} $}
+  \DisplayProof
+\end{align}
+
+
+
+
+\begin{align}
+\AxiomC{$C \equiv \Sigma x : A, B \quad \Gamma \vdash C : T \quad T \whnf K $}
+\noLine
+\UnaryInfC{$\Gamma \vdash M_{1} : T_{1} \quad T_{1} \leq A \quad \Gamma \vdash M_{2} : T_{2} \quad T_{2} \leq [M_{1}/x]B $}
+\tag{Pair-Rule}
+\UnaryInfC{$\Gamma \vdash pair_{C} (M_{1},M_{2}) \; : \; C $}
+\DisplayProof
+\end{align}
+
+
+
+\begin{align}
+\AxiomC{$\Gamma \vdash M : T$}
+\AxiomC{$ T \whnf \Sigma x : A , B $}
+\tag{$\pi_{1}$-Rule}
+\BinaryInfC{$\Gamma \vdash \pi_{1} (M) \; : \; A $}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\AxiomC{$\Gamma \vdash M : T$}
+\AxiomC{$ T \whnf \Sigma x : A , B $}
+\tag{$\pi_{2}$-Rule}
+\BinaryInfC{$\Gamma \vdash \pi_{2} (M) \; : \; [\pi_{1}(M)/x] B $}
+\DisplayProof
+\end{align}
+
+

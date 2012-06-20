@@ -1,0 +1,111 @@
+
+\section{Originales}
+
+\paragraph{}Estas son las reglas originales de {\bf ECC} tomadas de la tesis de Luo.
+
+\begin{align*}
+\hline \\
+\tag{Ax}
+\AxiomC{}
+\UnaryInfC{$\vdash Prop : Type_{0}$}
+\DisplayProof
+\end{align*}
+
+
+\begin{align}
+\tag{C}
+\AxiomC{$\Gamma \vdash A : Type_{j} \quad x \not\in FV(\Gamma)$}
+\UnaryInfC{$\Gamma, x:A \vdash Prop : Type_{0}$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{T}
+\AxiomC{$\Gamma \vdash Prop : Type_{0}$}
+\UnaryInfC{$\Gamma \vdash Type_{i} : Type_{i+1}$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{var}
+\AxiomC{$\Gamma,x:A,\Gamma' \vdash Prop : Type_{0}$}
+\UnaryInfC{$\Gamma,x:A,\Gamma' \vdash x : A$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{$\Pi_{1}$}
+\AxiomC{$\Gamma, x:A \vdash P : Prop$}
+\UnaryInfC{$\Gamma \vdash \Pi x:A.P : Prop$}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{$\Pi_{2}$}
+\AxiomC{$\Gamma \vdash A : Type_{j}$}
+\AxiomC{$\Gamma, x:A \vdash B : Type_{j}$}
+\BinaryInfC{$\Gamma \vdash \Pi x:A.B : Type_{j}$}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{$\lambda$}
+\AxiomC{$\Gamma, x:A \vdash M : B$}
+\UnaryInfC{$\Gamma \vdash \lambda x:A.M : \Pi x:A.B$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{app}
+\AxiomC{$\Gamma \vdash M : \Pi x:A.B$}
+\AxiomC{$\Gamma \vdash N : A$}
+\BinaryInfC{$\Gamma \vdash M N : [N/x]B$}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{$\Sigma$}
+\AxiomC{$\Gamma \vdash A:Type_{j} $}
+\AxiomC{$\Gamma,x:A \vdash B:Type_{j} $}
+\BinaryInfC{$\Gamma \vdash \Sigma x:A.B : Type_{j}$}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{pair}
+\AxiomC{$\Gamma \vdash M:A$}
+\AxiomC{$\Gamma \vdash N : [M/x] B$}
+\AxiomC{$\Gamma, x:A \vdash B : Type_{j}$}
+\TrinaryInfC{$\Gamma \vdash pair_{\Sigma x:A.B} (M,N) : \Sigma x:A.B$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{$\pi_{1}$}
+\AxiomC{$\Gamma \vdash M : \Sigma x:A.B$}
+\UnaryInfC{$\Gamma \vdash \pi_{1}(M) : A$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{$\pi_{2}$}
+\AxiomC{$\Gamma \vdash M : \Sigma x:A.B$}
+\UnaryInfC{$\Gamma \vdash \pi_{2}(M) : [\pi_{1}(M)/x]B$}
+\DisplayProof
+\end{align}
+
+\begin{align*}
+\tag{$\preceq$}
+\AxiomC{$\Gamma \vdash M:A$}
+\AxiomC{$\Gamma \vdash A':Type_{j} \quad A \preceq A'$}
+\BinaryInfC{$\Gamma \vdash M : A'$}
+\DisplayProof \\
+\\
+\hline
+\end{align*}
