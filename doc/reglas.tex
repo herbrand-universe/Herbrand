@@ -117,6 +117,23 @@ Si bien hay una por cada construcci\'on falta pensar el tema de $\leq$.
 
 \paragraph{}{\bf The Extended Calculus of Constructions with Inductive Types (Ore)}
 
+\begin{align}
+\tag{1-Rule}
+\AxiomC{$\Gamma \vdash Prop : Type_{0} $}
+\UnaryInfC{$\Gamma \vdash 1 : Type_{0} $}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{$\bot$-Rule}
+\AxiomC{$\Gamma \vdash Prop : Type_{0} $}
+\UnaryInfC{$\Gamma \vdash \bot : 1 $}
+\DisplayProof
+\end{align}
+
+\begin{align}
+\tag{$1\lambda$}
+\end{align}
 
 \begin{align}
 \tag{$+$ Rule}
@@ -172,6 +189,26 @@ $\Gamma \vdash A + B : Type_{j}$
 \paragraph{Creo que las leyes pueden ser estas:}
 
 \begin{align}
+\tag{1-Rule}
+\AxiomC{$ $}
+\UnaryInfC{$\Gamma \vdash 1 : Type_{0}$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{$\bot$-Rule}
+\AxiomC{$ $}
+\UnaryInfC{$\Gamma \vdash \bot : 1$}
+\DisplayProof
+\end{align}
+
+
+\begin{align}
+\tag{$1\lambda$}
+\end{align}
+
+\begin{align}
 \tag{$+$ Rule}
 \AxiomC{$\Gamma \vdash A : T_{1} \quad T_{1} \whnf K$}
 \AxiomC{$\Gamma \vdash B : T_{2} \quad T_{2} \whnf K'$}
@@ -201,6 +238,19 @@ $\Gamma \vdash A + B : Type_{j}$
 
 \begin{align}
 \tag{Case-Rule}
+\AxiomC{$\Gamma \vdash x : T \quad T \whnf A + B$}
+\noLine
+\UnaryInfC{$\Gamma \vdash M : T_{1} \quad T_{1} \whnf \Pi y : A'. C' \quad A \cong A'$}
+\noLine
+\UnaryInfC{$\Gamma \vdash N : T_{2} \quad T_{2} \whnf \Pi z : B'. C'' \quad B \cong B'$}
+\noLine
+\UnaryInfC{$C_{1} = [x/inl y] C' \quad \Gamma \vdash C_{1} : S_{1} \quad S_{1} \whnf K_{1}$}
+\noLine
+\UnaryInfC{$C_{2} = [x/inl z] C'' \quad \Gamma \vdash C_{2} : S_{2} \quad S_{2} \whnf K_{2}$}
+\noLine
+\UnaryInfC{$C_{1} \cong C_{2}$}
+\UnaryInfC{$\Gamma \vdash case(x,M,N) : C_{1}$}
+\DisplayProof
 \end{align}
 
 \end{document}
