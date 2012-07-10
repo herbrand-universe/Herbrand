@@ -35,6 +35,7 @@ type prop =
 type global = 
   | Gdef     of name * astTerm
   | Gvar     of name * astTerm
+  | Gind     of name * ((name * astTerm) list)
   | Gproof   of name * prop
   | Gend
   | Ginfer   of astTerm

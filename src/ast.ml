@@ -37,6 +37,7 @@ type prop =
 type global = 
   | Gdef     of name * astTerm
   | Gvar     of name * astTerm
+  | Gind     of name * ((name * astTerm) list)
   | Gproof   of name * prop
   | Gend
   | Ginfer   of astTerm
@@ -49,7 +50,7 @@ type global =
 
 let pp_sort fmt = function
   | AProp -> fprintf fmt "Prop"
-  | AType n -> fprintf fmt "Type <%d>" n
+  | AType n -> fprintf fmt "Type/%d" n
 
 let rec freeVar n = function
   | AVar name when (n = name)        -> true
@@ -63,26 +64,21 @@ let rec freeVar n = function
   | APair (s,t1,t2)                  -> (freeVar n s) || (freeVar n t1) || (freeVar n t2) 
   | _                                -> false
 
-let rec pp_astTerm fmt = function
-  | AVar name        -> fprintf fmt "%s" name
-  | ASort s          -> fprintf fmt "%a" pp_sort s
-  | ALam  (s,t1, t2) -> 
-    fprintf fmt "L %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
-  | AApp  (t1 , t2) -> 
-    fprintf fmt "[(%a) (%a)]" pp_astTerm t1 pp_astTerm t2
-  | APi (s,t1,t2) when (freeVar s t2) -> 
-    fprintf fmt "P %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
-  | APi (s,t1,t2) -> 
-    fprintf fmt "(%a) -> (%a)" pp_astTerm t1 pp_astTerm t2
-  | ASigma (s,t1,t2) when (freeVar s t2) -> 
-    fprintf fmt "S %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
-  | ASigma (s,t1,t2) -> 
-    fprintf fmt "<%a,%a>" pp_astTerm t1 pp_astTerm t2
-  | APair (s,t1,t2)  ->
-    fprintf fmt "pair [%a][%a,%a]" pp_astTerm s pp_astTerm t1 pp_astTerm t2
-  | AFst t  -> fprintf fmt "fst(%a)" pp_astTerm t
-  | ASnd t  -> fprintf fmt "snd(%a)" pp_astTerm t
-  | AInl (c,t)  -> fprintf fmt "inl(%a)" pp_astTerm t
-  | AInr (c,t)  -> fprintf fmt "inr(%a)" pp_astTerm t
-  | ASum (a,b)  -> fprintf fmt "((%a) + (%a))" pp_astTerm a pp_astTerm b
+let rec pp_astTerm fmt term =
+  let pp a = fprintf fmt a in
+  match term with
+  | AVar name        -> pp "%s" name
+  | ASort s          -> pp "%a" pp_sort s
+  | ALam  (s,t1, t2) -> pp "L %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
+  | AApp  (t1 , t2)  ->  pp "[(%a) (%a)]" pp_astTerm t1 pp_astTerm t2
+  | APi (s,t1,t2) when (freeVar s t2) -> pp "P %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
+  | APi (s,t1,t2)    ->  pp"(%a) -> (%a)" pp_astTerm t1 pp_astTerm t2
+  | ASigma (s,t1,t2) when (freeVar s t2) -> pp "S %s : (%a), (%a)" s pp_astTerm t1 pp_astTerm t2
+  | ASigma (s,t1,t2) -> pp "<%a,%a>" pp_astTerm t1 pp_astTerm t2
+  | APair (s,t1,t2)  -> pp "pair [%a][%a,%a]" pp_astTerm s pp_astTerm t1 pp_astTerm t2
+  | AFst t           -> pp "fst(%a)" pp_astTerm t
+  | ASnd t           -> pp "snd(%a)" pp_astTerm t
+  | AInl (c,t)       -> pp "inl(%a)" pp_astTerm t
+  | AInr (c,t)       -> pp "inr(%a)" pp_astTerm t
+  | ASum (a,b)       -> pp "((%a) + (%a))" pp_astTerm a pp_astTerm b
 

@@ -1,10 +1,10 @@
+open Utils
 open Ast
 open Term
 open Logic
 open Format
 open Typechecker
-(*open Tests (* Al incluirlo se van a ejecutar los tests *)
-*)
+
 module C = Context
 
 type state = {
@@ -35,7 +35,6 @@ let process_def (n, def) =
 
 (* Aca empieza todo a fines practicos *)
 let main = function
-(* | Gassume (n,t)     -> state.gamma <- (Context.addGlobal state.gamma n (toDeBruijn t))*)
  | Gvar  (n,t) when not (C.isDecl state.gamma n)    -> process_decl (n,t)
  | Gdef  (n,t) when not (C.isDecl state.gamma n)    -> process_def (n,t) 
  | Gdef  (n,_)       -> Format.printf "The name [%s] is alredy in use@\n" n
@@ -59,7 +58,7 @@ let parse () =
         parse_and_catch () 
     with
       | Lexer.Eof -> exit 0 
-      | e -> printf "Error\n";(*catch_exn e *)parse_and_catch () 
+      | e -> catch_exn e; parse_and_catch () 
   in parse_and_catch ()
 
 let _ = parse ()

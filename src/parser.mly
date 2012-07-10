@@ -1,18 +1,24 @@
 %{
+  open Utils
   open Ast
   open Term
+
+  let get_pos () = pos_of_lex (symbol_start_pos()) (symbol_end_pos())
+
+  let parse_error msg = raise (ParseError (get_pos (), msg))
+
 %}
 
 /* Parser para Herbrand */
 %token <string> IDENT
 %token <int> NUM
-%token DEF SHOW PROOF END ALL TEST VAR
+%token DEF SHOW PROOF END ALL TEST VAR IND
 %token EQ CHECK WITH WHNF ID INFER SHOW QUIT
 %token COLON DOT COMMA TSEP ARROW
 %token LAM PI PROP TYPE SIGMA PAIR FST SND
 %token AND OR IMP NOT EXISTS FORALL TRUE FALSE
 %token PLUS INR INL CASE EQLKEY LKEY RKEY
-%token LPAREN RPAREN
+%token LPAREN RPAREN LBRACKET RBRACKET
 %token LT GT
 %token EOL
 %start global
@@ -26,6 +32,7 @@ global:
 global_elem:
 |  VAR ident COLON term    { Gvar ($2,$4) }
 |  DEF ident EQ term       { Gdef ($2,$4) }
+|  IND ident COLON context WITH { Gind ($2,$4) }
 |  PROOF ident EQ prop     { Gproof ($2,$4) }
 |  END                     { Gend }
 |  INFER term              { Ginfer $2 }
@@ -35,6 +42,7 @@ global_elem:
 |  SHOW term               { Gshow $2 }
 |  TEST                    { Gtest }
 |  QUIT                    { Gquit }
+|  error                   { parse_error "Command not found" }
 ;
 
 
@@ -79,3 +87,13 @@ prop:
 | EXISTS ident COLON term COMMA prop   { Lexists ($2,$4,$6) }
 | TRUE	       	     	  	       { Ltrue }
 | FALSE				       { Lfalse }
+;
+
+context:
+|  empty                                      { [] }
+|  LBRACKET ident COLON term RBRACKET context { ($2,$4) :: $6 }
+;
+
+empty:
+| {}
+;

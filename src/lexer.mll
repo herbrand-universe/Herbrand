@@ -26,6 +26,7 @@ let global_keywords =
     (**)
     "Def",     DEF; 
     "Var",     VAR;
+    "Ind",     IND;
     "Show",    SHOW;
     "Proof",   PROOF;
     "End",     END;
@@ -89,6 +90,8 @@ rule token = parse
   | "={"               { EQLKEY }
   | '}'                { RKEY} 
   | '{'                { RKEY} 
+  | '['                { LBRACKET } 
+  | ']'                { RBRACKET } 
 
   | '='                { EQ }
   | '('                { LPAREN }

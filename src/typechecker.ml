@@ -1,10 +1,8 @@
+open Utils
 open Term
 module T = Term
 module C = Context
 
-
-(* Instead of using the option type, here we use exception ... *)
-exception Error
 
 
 (******************************************************************************
@@ -77,7 +75,7 @@ let rec typeof c = function
   | Inl (m,n)      when (test pInlRule c m n)      -> cInlRule c m n
   | Inr (m,n)      when (test pInrRule c m n)      -> cInrRule c m n
   | Sum (m,n)      when (test pSumRule c m n)      -> cSumRule c m n
-  | _                                              -> raise Error
+  | _                                              -> type_error "No rule to apply"
 
 and test f a b c    = try f a b c with _ -> false
 and test2 f a b     = try f a b with _ -> false
